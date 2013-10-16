@@ -13,7 +13,7 @@ Cv::Application.routes.draw do
   patch  "profile"      => "user#update"
   delete "profile"      => "user#destroy"
   
-  get  "register/:code" => "user#new"
+  get  "register/:code" => "user#new", as: :register
   post "register/:code" => "user#create"
   
   # Password reset

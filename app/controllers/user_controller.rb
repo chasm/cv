@@ -1,5 +1,5 @@
 class UserController < ApplicationController
-  before_action :is_authenticated
+  before_action :is_authenticated, except: [ :new, :create ]
   before_action :get_user, except: [ :new, :create ]
   before_action :get_registrant, only: [ :new, :create ]
   
@@ -30,7 +30,7 @@ class UserController < ApplicationController
   end
   
   def get_registrant
-    @registrant = Registrant.find_by(code: params[:code])
+    @registrant = Registrant.find_by(id: params[:code])
     
     unless @registrant && @registrant.expires_at > Time.now
       @registrant.destroy if @registrant

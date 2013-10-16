@@ -15,7 +15,7 @@
             = f.password_field :password_confirmation, class: "password clear", placeholder: "Again", class: "form-control"
           .form-group
             input#hidden-strength type="hidden" name="strength" value="0"
-            = f.submit "Save changes", id: "save-password", class: "btn btn-danger", disabled: true
+            = f.submit "Register", id: "save-password", class: "btn btn-danger", disabled: true
             button#toggle-password-field.btn.btn-warning Show Passwords
         .col-lg-6
           p#pw-quality Password too weak!

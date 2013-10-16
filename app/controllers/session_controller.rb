@@ -14,33 +14,42 @@ class SessionController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:user][:email])
+    if params[:user][:password].blank?
+      user = User.find_by(email: params[:user][:email])
     
-    if user
-      if params[:user][:password].blank?
+      if user
         user.code = SecureRandom.urlsafe_base64
         user.expires_at = Time.now + 4.hours
         user.save
-      
+    
         PasswordMailer.reset_email(user).deliver
-        
+      
         flash.now.notice = "An email with instructions for " +
           "resetting your password has been sent to you."
         render :new
       else
-        if user.authenticate(params[:user][:password])
-          session[:user_id] = user.id
-          
-          redirect_to root_url
+        registrant = Registrant.create(email: params[:user][:email])
+        
+        if registrant
+          UserMailer.registration_email(registrant).deliver
+      
+          flash.now.notice = "An email with instructions for " +
+            "completing your registration has been sent to you."
+          render :new
         else
-          flash.now.alert = "Unable to sign you in. Please try again."
+          flash.now.alert = "Unable to register you. Please try again."
           render :new
         end
       end
     else
-      flash.now.alert = "We cannot find a user with that email address. " +
-        "Please check the address and try again."
-      render :new
+      if user = User.authenticate(params[:user][:email], params[:user][:password])
+        session[:user_id] = user.id
+        
+        redirect_to root_url
+      else
+        flash.now.alert = "Unable to sign you in. Please try again."
+        render :new
+      end
     end
   end
 
