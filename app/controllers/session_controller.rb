@@ -11,7 +11,6 @@ class SessionController < ApplicationController
     if user
       if user.authenticate(params[:user][:password])
         session[:user_id] = user.id
-        session[:school_id] = user.school.id
         
         if session[:redirect_to]
           url = session[:redirect_to]
