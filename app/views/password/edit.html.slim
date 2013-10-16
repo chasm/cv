@@ -1,9 +1,9 @@
 #resetform.row
-  .col-lg-6.col-lg-offset-3
+  .col-lg-8.col-lg-offset-2
     = form_for :user, url: reset_url, method: "PUT", html: { role: "form", autocomplete: :off } do |f|
       legend Reset your password
       .row
-        .col-lg-8
+        .col-lg-6
           .form-group
             = f.label :password, "Type a new password"
             = f.password_field :password, autofocus: true, class: "password clear", placeholder: "Password", class: "form-control"
@@ -14,3 +14,13 @@
             input#hidden-strength type="hidden" name="strength" value="0"
             = f.submit "Save changes", id: "save-password", class: "btn btn-danger", disabled: true
             button#toggle-password-field.btn.btn-warning Show Passwords
+        .col-lg-6
+          p#pw-quality Password too weak!
+          #pw-meter.strength-meter.progress.progress-striped
+            #strength-meter.meter.progress-bar.w-0 aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"
+          .crack-div
+            strong Time to crack: &nbsp;
+            span#time-to-crack instant
+          #match-div
+
+script type="text/javascript" src="/js/zxcvbn-async.js"
