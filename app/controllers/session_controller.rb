@@ -6,8 +6,32 @@ class SessionController < ApplicationController
   end
 
   def create
+    user = User.find_by(email: params[:user][:email])
+    
+    if user
+      if user.authenticate(params[:user][:password])
+        session[:user_id] = user.id
+        session[:school_id] = user.school.id
+        
+        if session[:redirect_to]
+          url = session[:redirect_to]
+          session[:redirect_to] = nil
+          redirect_to url
+        else
+          redirect_to root_url
+        end
+      else
+        flash.now.alert = "Unable to sign you in. Please try again."
+        render :new
+      end
+    else
+      flash.now.alert = "We cannot find a user with that email address. " +
+        "Please check the address and try again."
+      render :new
+    end
   end
 
   def destroy
+    
   end
 end
