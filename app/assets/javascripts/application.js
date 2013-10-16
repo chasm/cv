@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+//= require password
 //= require bootstrap
 //= require ./vendor/jquery.noty
 //= require_tree ./vendor/layouts

@@ -56,6 +56,27 @@ legend, h2 {
   display: none;
 }
 
+/* Position the strength meter */
+.strength-meter {
+  margin-top: 8px;
+}
+
+/* Set the different colors and sizes for strengths of 0-4 */
+.progress .meter.w-0 {  width: 0%;  }
+.progress .meter.w-1 {  background: red; width: 25%;  }
+.progress .meter.w-2 {  background: orange; width: 50%;  }
+.progress .meter.w-3 {  background: yellow; width: 75%;  }
+.progress .meter.w-4 {  background: green; width: 100%;  }
+
+#match-div {
+  font-weight: bold;
+  color: @red;
+}
+
+#match-div.match {
+  color: @green;
+}
+
 #toggle-password-field {
   margin-left: 10px;
 }
