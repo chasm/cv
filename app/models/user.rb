@@ -15,6 +15,7 @@ class User
   field :expires_at, type: Time
 
   before_validation :downcase_email
+  before_create :set_id
   before_save :encrypt_password
   
   validates :email, presence: true
@@ -29,6 +30,10 @@ class User
 
   def downcase_email
     self.email.downcase!
+  end
+  
+  def set_id
+    self.id = SecureRandom.urlsafe_base64
   end
 
   def encrypt_password
