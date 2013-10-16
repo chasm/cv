@@ -56,6 +56,12 @@ legend, h2 {
   display: none;
 }
 
+#registrant-email {
+  margin: 20px 0;
+  font-size: 20px;
+  line-height: 36px;
+}
+
 /* Position the strength meter */
 .strength-meter {
   margin-top: 8px;

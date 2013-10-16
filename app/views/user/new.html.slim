@@ -18,6 +18,7 @@
             = f.submit "Register", id: "save-password", class: "btn btn-danger", disabled: true
             button#toggle-password-field.btn.btn-warning Show Passwords
         .col-lg-6
+          p#registrant-email = @registrant.email
           p#pw-quality Password too weak!
           #pw-meter.strength-meter.progress.progress-striped
             #strength-meter.meter.progress-bar.w-0 aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"
