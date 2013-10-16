@@ -22,6 +22,13 @@ class User
   validates :email, uniqueness: { case_sensitive: false }
   validates :password, confirmation: true
   
+  def self.authenticate(email, password)
+    user = User.find_by(email: email)
+    
+    return user if user && user.fish == BCrypt::Engine.hash_secret(password, user.salt)
+    nil
+  end
+  
   def authenticate(password)
     self.fish == BCrypt::Engine.hash_secret(password, self.salt)
   end
