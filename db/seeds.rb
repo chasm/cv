@@ -1,7 +1,7 @@
 Registrant.destroy_all
 
 Registrant.create([
-  { email: "bob@munat.com" },
-  { email: "sam@munat.com" },
-  { email: "tina@munat.com" }
+  { email: "BOB@munat.com" },
+  { email: "Sam@munat.com" },
+  { email: "tina@MUNAT.com" }
 ])
