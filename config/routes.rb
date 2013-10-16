@@ -6,6 +6,9 @@ Cv::Application.routes.draw do
   get    "logout" => "session#destroy"
   delete "logout" => "session#destroy"
   
+  # User controls
+  resource :user
+  
   # Password reset
   get "reset/:code" => "password#edit", as: :reset
   put "reset/:code" => "password#update"
