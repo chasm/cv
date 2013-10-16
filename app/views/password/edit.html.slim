@@ -6,10 +6,10 @@
         .col-lg-6
           .form-group
             = f.label :password, "Type a new password"
-            = f.password_field :password, autofocus: true, class: "password clear", placeholder: "Password", class: "form-control"
+            = f.password_field :password, autofocus: true, class: "password clear form-control", placeholder: "Password"
           .form-group
             = f.label :password_confirmation, "Type it again"
-            = f.password_field :password_confirmation, class: "password clear", placeholder: "Again", class: "form-control"
+            = f.password_field :password_confirmation, class: "password clear form-control", placeholder: "Again"
           .form-group
             input#hidden-strength type="hidden" name="strength" value="0"
             = f.submit "Save changes", id: "save-password", class: "btn btn-danger", disabled: true
