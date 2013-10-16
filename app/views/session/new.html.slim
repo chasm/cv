@@ -1,0 +1,17 @@
+#loginform.row
+  .col-lg-4.col-lg-offset-4
+    = form_for :user, url: login_url, method: "POST", html: { role: "form" } do |f|
+      legend Please sign in
+      .row
+        .col-lg-8
+          .form-group
+            = f.label :email, "Email address"
+            = f.text_field :email, class: "email clear form-control", placeholder: "Email address"
+          .form-group
+            = f.label :password
+            = f.password_field :password, class: "password clear form-control", placeholder: "Password"
+          .form-group
+            = token_tag form_authenticity_token
+            = f.submit "Sign in", class: "btn btn-primary"
+            button#toggle-password-field.btn.btn-warning Show Password
+   

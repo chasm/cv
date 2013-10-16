@@ -8,6 +8,71 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require bootstrap
+ *= require bootstrap-theme
+ *= require datetimepicker
  *= require_self
- *= require_tree .
  */
+
+html, body {
+  height: 100%;
+  background-color: #ffffff;
+}
+
+legend, h2 {
+  text-align: left;
+  font-size: 20px;
+  line-height: 30px;
+  color: #5cb85c;
+  border-bottom: 1px solid #5cb85c;
+}
+
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -40px;
+  /* Pad bottom by footer height */
+  padding: 0 0 40px;
+}
+
+#wrap > .container {
+  padding: 50px 15px 0;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: lowercase;
+  color: #5cb85c !important;
+}
+
+#loginform {
+  margin-top: 40px;
+}
+
+#loginform form label {
+  display: none;
+}
+
+#toggle-password-field {
+  margin-left: 10px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  text-align: right;
+  height: 40px;
+}
+
+#footer p {
+  line-height: 40px;
+}
+
+#footer p a {
+  text-decoration: none;
+}
+
+#footer p a:hover {
+}
