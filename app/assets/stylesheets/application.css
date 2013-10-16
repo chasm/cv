@@ -48,7 +48,7 @@ legend, h2 {
   color: #5cb85c !important;
 }
 
-#loginform {
+#loginform, #resetform {
   margin-top: 40px;
 }
 

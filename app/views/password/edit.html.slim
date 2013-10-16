@@ -1,1 +1,16 @@
-p Password reset form
+#resetform.row
+  .col-lg-6.col-lg-offset-3
+    = form_for :user, url: reset_url, method: "PUT", html: { role: "form", autocomplete: :off } do |f|
+      legend Reset your password
+      .row
+        .col-lg-8
+          .form-group
+            = f.label :password, "Type a new password"
+            = f.password_field :password, autofocus: true, class: "password clear", placeholder: "Password", class: "form-control"
+          .form-group
+            = f.label :password_confirmation, "Type it again"
+            = f.password_field :password_confirmation, class: "password clear", placeholder: "Again", class: "form-control"
+          .form-group
+            input#hidden-strength type="hidden" name="strength" value="0"
+            = f.submit "Save changes", id: "save-password", class: "btn btn-danger", disabled: true
+            button#toggle-password-field.btn.btn-warning Show Passwords
