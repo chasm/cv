@@ -56,6 +56,10 @@ legend, h2 {
   display: none;
 }
 
+.login-options {
+  margin: 20px 0;
+}
+
 #registrant-email {
   margin: 20px 0;
   font-size: 20px;

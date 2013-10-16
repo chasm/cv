@@ -1,5 +1,12 @@
 #loginform.row
   .col-lg-4.col-lg-offset-4
+    ul.nav.nav-pills.login-options
+      li.active
+        a#login-pill href="#" Sign in
+      li
+        a#register-pill href="#" Register
+      li
+        a#reset-pill href="#" Reset Password
     = form_for :user, url: login_url, method: "POST", html: { role: "form" } do |f|
       legend Please sign in
       .row
