@@ -1,7 +1,8 @@
 class UserController < ApplicationController
+  before_action :is_authenticated
   
   def show
-    
+    @user = current_user
   end
   
   def new

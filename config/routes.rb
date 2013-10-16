@@ -7,7 +7,14 @@ Cv::Application.routes.draw do
   delete "logout" => "session#destroy"
   
   # User controls
-  resource :user
+  get    "profile"      => "user#show"
+  get    "profile/edit" => "user#edit"
+  put    "profile"      => "user#update"
+  patch  "profile"      => "user#update"
+  delete "profile"      => "user#destroy"
+  
+  get  "register/:code" => "user#new"
+  post "register/:code" => "user#create"
   
   # Password reset
   get "reset/:code" => "password#edit", as: :reset
