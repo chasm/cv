@@ -6,6 +6,10 @@ Cv::Application.routes.draw do
   get    "logout" => "session#destroy"
   delete "logout" => "session#destroy"
   
+  # Password reset
+  get "reset/:code" => "password#edit", as: :reset
+  put "reset/:code" => "password#update"
+  
   # Legal
   get "privacy" => "site#privacy"
   get "terms" => "site#terms"
