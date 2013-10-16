@@ -1,8 +1,16 @@
 class SessionController < ApplicationController
+  before_action :is_authenticated, only: [ :destroy ]
   
   def new
     @title = "Sign In"
-    @user = User.new
+    
+    if current_user
+      redirect_to root_url
+    else
+      @user = User.new
+    
+      render :new
+    end
   end
 
   def create
