@@ -23,7 +23,10 @@ html lang="en"
     <![endif]-->
   body
     #wrap
-      == render partial: "layouts/header"
+      - if current_user
+        == render partial: "layouts/navigation"
+      - else
+        == render partial: "layouts/header"
 
       .container
         .page
