@@ -14,7 +14,7 @@ class SessionController < ApplicationController
         user.expires_at = Time.now + 4.hours
         user.save
       
-        # PasswordMailer.reset_email(user).deliver
+        PasswordMailer.reset_email(user).deliver
         
         flash.now.notice = "An email with instructions for " +
           "resetting your password has been sent to you."
