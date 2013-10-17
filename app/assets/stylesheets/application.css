@@ -19,6 +19,14 @@ html, body {
   background-color: #ffffff;
 }
 
+h1 {
+  text-align: left;
+  font-size: 28px;
+  line-height: 42px;
+  color: #428bca;
+  border-bottom: 2px solid #428bca;
+}
+
 legend, h2 {
   text-align: left;
   font-size: 20px;
@@ -89,6 +97,31 @@ legend, h2 {
 
 #toggle-password-field {
   margin-left: 10px;
+}
+
+.dates {
+  float: right;
+}
+
+.address {
+  color: #428bca;
+}
+
+.address strong {
+  font-size: 18px;
+  color: #d9534f;
+}
+
+.phone {
+  color: #d9534f;
+}
+
+.email {
+  color: #c24ed9;
+}
+
+.objective {
+  font-style: italic;
 }
 
 /* Set the fixed height of the footer here */

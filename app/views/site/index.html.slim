@@ -1,1 +1,107 @@
-p Dashboard
+.row
+  .col-lg-8
+    h1 = @user.name
+    - if @user.respond_to?(:address)
+      p.address
+        - @user.address.each do |line|
+          div = line
+    p.contact-info
+      - if @user.respond_to?(:phone)
+        div.phone = @user.phone
+      div.email = @user.email
+.row
+  .col-lg-8
+    - if @user.respond_to?(:objective)
+      h2 Objective 
+      p.objective = @user.objective
+.row
+  .col-lg-8
+    - if @user.respond_to?(:schools)
+      h2 Education
+      - @user.schools.each do |school|
+        .school
+          p.dates
+            - if school.respond_to?(:started_on) && !school.started_on.blank?
+              span.from = school.started_on.strftime("%B %Y")
+            - if school.respond_to?(:started_on) && !school.started_on.blank? && school.respond_to?(:left_on) && !school.left_on.blank?
+              ' -
+            - if school.respond_to?(:left_on) && !school.left_on.blank?
+              span.from = school.left_on.strftime("%B %Y")
+          - if school.respond_to?(:address)
+            p.address
+              - school.address.each do |line|
+                div = line
+          p
+            - if school.respond_to?(:highest_grade_completed) && !school.highest_grade_completed.blank?
+              strong Highest grade completed:
+              = school.highest_grade_completed
+            - if school.respond_to?(:graduated)
+              strong Graduated?
+              = school.graduated ? "Yes" : "No"
+            - if school.respond_to?(:awards)
+              strong Awards:
+              = school.awards.join("; ")
+            - if school.respond_to?(:volunteer_work)
+              strong Volunteer work:
+              = school.volunteer_work.join("; ")
+.row
+  .col-lg-8
+    - if @user.respond_to?(:jobs)
+      h2 Work Experience
+      - @user.jobs.each do |job|
+        .job
+          p.dates
+            - if job.respond_to?(:started_on) && !job.started_on.blank?
+              span.from = job.started_on.strftime("%B %Y")
+            - if job.respond_to?(:started_on) && !job.started_on.blank? && job.respond_to?(:left_on) && !job.left_on.blank?
+              ' -
+            - if job.respond_to?(:left_on) && !job.left_on.blank?
+              span.from = job.left_on.strftime("%B %Y")
+          - if job.respond_to?(:address)
+            p.address
+              strong
+                - if job.respond_to?(:position)
+                  = "#{job.position}, "
+                - if job.respond_to?(:company)
+                  = job.company
+              - job.address.each do |line|
+                div = line
+          - if job.respond_to?(:duties) && !job.duties.empty?
+              p
+                strong Duties:
+              ul
+                - job.duties.each do |duty|
+                  li = duty
+.row
+  .col-lg-8
+    - if @user.respond_to?(:awards) && !@user.awards.empty?
+      h2 Honors and Awards 
+      ul
+        - @user.awards.each do |award|
+          - if award.respond_to?(:title)
+            li 
+              strong = award.title
+              - if award.respond_to?(:awarded_on) && !award.awarded_on.blank?
+                br
+                = award.awarded_on.strftime("%B %Y")
+.row
+  .col-lg-8
+    - if @user.respond_to?(:skills) && !@user.skills.empty?
+      h2 Skills 
+      ul
+        - @user.skills.each do |skill|
+          li = skill
+.row
+  .col-lg-8
+    - if @user.respond_to?(:references) && !@user.references.empty?
+      h2 References 
+      ul
+        - @user.references.each do |ref|
+          - if ref.respond_to?(:name) && !ref.name.blank?
+            li
+              strong = ref.name
+              - if ref.respond_to?(:email) && !ref.email.blank?
+                = ref.email
+     
+   
+ 
