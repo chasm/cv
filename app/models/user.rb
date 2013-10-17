@@ -2,11 +2,20 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   
+  embeds_one :address
+  embeds_many :schools
+  embeds_many :jobs
+  embeds_many :honors
+  embeds_many :references
+  
   attr_accessor :password, :password_confirmation
   
   field :id, type: String
   field :name, type: String
   field :email, type: String
+  field :phone, type: String
+  field :objective, type: String
+  field :skills, type: Array
   
   field :salt, type: String
   field :fish, type: String

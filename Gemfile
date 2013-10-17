@@ -8,4 +8,4 @@ gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'slim'
 
 gem 'bson_ext'
-gem 'mongoid', github: 'mongoid/mongoid'
+gem 'mongoid', github: 'mongoid/mongoid', ref: 'f91feef'

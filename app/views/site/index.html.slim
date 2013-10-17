@@ -3,8 +3,9 @@
     h1 = @user.name
     - if @user.respond_to?(:address)
       p.address
-        - @user.address.each do |line|
-          div = line
+        - if @user.address.respond_to?(:lines)
+          - @user.address.lines.each do |line|
+            div = line
     p.contact-info
       - if @user.respond_to?(:phone)
         div.phone = @user.phone
@@ -22,28 +23,35 @@
         .school
           p.dates
             - if school.respond_to?(:started_on) && !school.started_on.blank?
-              span.from = school.started_on.strftime("%B %Y")
-            - if school.respond_to?(:started_on) && !school.started_on.blank? && school.respond_to?(:left_on) && !school.left_on.blank?
+              span.from => school.started_on.strftime("%B %Y")
               ' -
             - if school.respond_to?(:left_on) && !school.left_on.blank?
               span.from = school.left_on.strftime("%B %Y")
-          - if school.respond_to?(:address)
+            - else
+              ' present
             p.address
-              - school.address.each do |line|
-                div = line
+              strong = school.name
+              - if school.respond_to?(:address)
+                - if school.address.respond_to?(:lines)
+                  - school.address.lines.each do |line|
+                    div = line
           p
             - if school.respond_to?(:highest_grade_completed) && !school.highest_grade_completed.blank?
-              strong Highest grade completed:
-              = school.highest_grade_completed
+              div
+                strong Highest grade completed:
+                =< school.highest_grade_completed
             - if school.respond_to?(:graduated)
-              strong Graduated?
-              = school.graduated ? "Yes" : "No"
-            - if school.respond_to?(:awards)
-              strong Awards:
-              = school.awards.join("; ")
-            - if school.respond_to?(:volunteer_work)
-              strong Volunteer work:
-              = school.volunteer_work.join("; ")
+              div
+                strong Graduated?
+                =< school.graduated ? "Yes" : "No"
+            - if school.respond_to?(:awards) && !school.awards.empty?
+              div
+                strong Awards:
+                =< school.awards.join("; ")
+            - if school.respond_to?(:activities) && !school.activities.empty?
+              div
+                strong Activities:
+                =< school.activities.join("; ")
 .row
   .col-lg-8
     - if @user.respond_to?(:jobs)
@@ -52,11 +60,12 @@
         .job
           p.dates
             - if job.respond_to?(:started_on) && !job.started_on.blank?
-              span.from = job.started_on.strftime("%B %Y")
-            - if job.respond_to?(:started_on) && !job.started_on.blank? && job.respond_to?(:left_on) && !job.left_on.blank?
+              span.from => job.started_on.strftime("%B %Y")
               ' -
             - if job.respond_to?(:left_on) && !job.left_on.blank?
               span.from = job.left_on.strftime("%B %Y")
+            - else
+              ' present
           - if job.respond_to?(:address)
             p.address
               strong
@@ -64,8 +73,9 @@
                   = "#{job.position}, "
                 - if job.respond_to?(:company)
                   = job.company
-              - job.address.each do |line|
-                div = line
+              - if job.address.respond_to?(:lines)
+                - job.address.lines.each do |line|
+                  div = line
           - if job.respond_to?(:duties) && !job.duties.empty?
               p
                 strong Duties:
@@ -101,7 +111,7 @@
             li
               strong = ref.name
               - if ref.respond_to?(:email) && !ref.email.blank?
-                = ref.email
+                = ": #{ref.email}"
      
    
  
