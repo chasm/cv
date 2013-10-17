@@ -17,7 +17,7 @@
       div
         = link_to "Reset my password", update_password_url, method: :post
       div
-        = link_to "Delete my account", profile_url, method: :delete, confirm: "Are your sure?"
+        = link_to "Delete my account", profile_url, method: :delete, data: { confirm: "Are your sure?" }
 .row
   .col-lg-8
     - if @user.respond_to?(:objective)
