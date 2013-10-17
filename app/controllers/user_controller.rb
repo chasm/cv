@@ -29,6 +29,12 @@ class UserController < ApplicationController
   end
   
   def update
+    if @user.update_attributes(profile_params)
+      redirect_to root_url, notice: "Your curriculum vitae has been updated."
+    else
+      flash.now.error = "Unable to update your curriculum vitae."
+      render :edit
+    end
   end
   
   def destroy
@@ -54,6 +60,14 @@ class UserController < ApplicationController
       :name,
       :password,
       :password_confirmation
+    )
+  end
+  
+  def profile_params
+    params.require(:user).permit(
+      :name,
+      :phone,
+      :objective
     )
   end
 end
