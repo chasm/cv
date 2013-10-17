@@ -12,6 +12,9 @@
       - if @user.respond_to?(:phone)
         div.phone = @user.phone
       div.email = @user.email
+  .col-lg-4
+    #profile-links
+      = link_to "Delete my account", profile_url, method: :delete, confirm: "Are your sure?"
 .row
   .col-lg-8
     - if @user.respond_to?(:objective)

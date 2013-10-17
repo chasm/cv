@@ -38,6 +38,9 @@ class UserController < ApplicationController
   end
   
   def destroy
+    @user.destroy
+    session[:user_id] = nil
+    redirect_to login_url, notice: "You have deleted your account."
   end
   
   private
