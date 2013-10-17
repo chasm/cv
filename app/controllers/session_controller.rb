@@ -3,6 +3,7 @@ class SessionController < ApplicationController
   
   def new
     @title = "Sign In"
+    @request = request
     
     if current_user
       redirect_to root_url
@@ -22,7 +23,7 @@ class SessionController < ApplicationController
         user.expires_at = Time.now + 4.hours
         user.save
     
-        PasswordMailer.reset_email(user).deliver
+        PasswordMailer.reset_email(user, request).deliver
       
         flash.now.notice = "An email with instructions for " +
           "resetting your password has been sent to you."
@@ -31,7 +32,7 @@ class SessionController < ApplicationController
         registrant = Registrant.create(email: params[:user][:email])
         
         if registrant
-          UserMailer.registration_email(registrant).deliver
+          UserMailer.registration_email(registrant, request).deliver
       
           flash.now.notice = "An email with instructions for " +
             "completing your registration has been sent to you."

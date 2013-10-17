@@ -7,14 +7,17 @@ $(function() {
       $('#toggle-password-field').show();
       $('#user_password').show();
       $('#loginform legend').html('Please sign in');
+      $('#login-submit').val('Sign in');
     } else {
       $('#toggle-password-field').hide();
       $('#user_password').hide();
+      $('#user_password').val('');
       if ($(this)[0].id === 'register-pill') {
-        $('#loginform legend').html('Please register');
+        $('#login-submit').val('Register');
       } else {
-        $('#loginform legend').html('Please submit your email address');
+        $('#login-submit').val('Reset password');
       }
+      $('#loginform legend').html('Please enter your email address');
     }
     
     event.preventDefault();
