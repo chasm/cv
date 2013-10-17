@@ -2,18 +2,29 @@ Registrant.destroy_all
 User.destroy_all
 
 Registrant.create([
-  { email: "BOB@munat.com" },
-  { email: "Sam@munat.com" },
-  { email: "tina@MUNAT.com" }
+  {
+    id: SecureRandom.urlsafe_base64,
+    email: "BOB@munat.com"
+  },
+  {
+    id: SecureRandom.urlsafe_base64,
+    email: "Sam@munat.com"
+  },
+  {
+    id: SecureRandom.urlsafe_base64,
+    email: "tina@MUNAT.com"
+  }
 ])
 
 User.create([
   {
+    id: SecureRandom.urlsafe_base64,
     name: "Tommy Tutone",
     email: "tommy@munat.com",
     phone: "202.5555.4444",
     objective: "To obtain work in a highly-paid sinecure somewhere in the entertainment or food and beverage industries.",
     address: Address.new(
+      id: SecureRandom.urlsafe_base64,
       lines: [
         "123 Rocker Road",
         "Punkville, Texas 00666",
@@ -22,10 +33,12 @@ User.create([
     ),
     schools: [
       School.new(
+        id: SecureRandom.urlsafe_base64,
         name: "Watson Elementary School",
         started_on: Date.new(1987,9),
         left_on: Date.new(1999,5),
         address: Address.new(
+          id: SecureRandom.urlsafe_base64,
           lines: [
     				"221B Baker Street",
     				"London, England"
@@ -35,10 +48,12 @@ User.create([
   			graduated: false
       ),
       School.new(
+        id: SecureRandom.urlsafe_base64,
         name: "Vince Lombardi High School",
         started_on: Date.new(1999,9),
         left_on: Date.new(2005,5),
         address: Address.new(
+          id: SecureRandom.urlsafe_base64,
           lines: [
     				"4 Ramones Road",
     				"Hollywood, California 90210"
@@ -49,10 +64,12 @@ User.create([
   			awards: [ "Most Likely to Fail" ]
       ),
       School.new(
+        id: SecureRandom.urlsafe_base64,
         name: "Faber College",
         started_on: Date.new(2005,9),
         left_on: Date.new(2011,5),
         address: Address.new(
+          id: SecureRandom.urlsafe_base64,
           lines: [
     				"99 Delta House Drive",
     				"Belushi, New Hampshire 00001"
@@ -65,11 +82,13 @@ User.create([
     ],
     jobs: [
       Job.new(
+        id: SecureRandom.urlsafe_base64,
         position: "Product Tester",
         company: "Wonka Industries",
         started_on: Date.new(2011,6),
         left_on: Date.new(2011,7),
         address: Address.new(
+          id: SecureRandom.urlsafe_base64,
           lines: [
             "7 Willy Woods",
             "Hershey, Pennsylvania 55555"
@@ -85,10 +104,12 @@ User.create([
         reason_for_leaving: "Unexplained bathroom incident"
       ),
       Job.new(
+        id: SecureRandom.urlsafe_base64,
         position: "Fluffer",
         company: "Wanker Industries",
         started_on: Date.new(2011,6),
         address: Address.new(
+          id: SecureRandom.urlsafe_base64,
           lines: [
             "12 Willy Woods",
             "Hershey, Pennsylvania 55555"
@@ -106,9 +127,21 @@ User.create([
       "Likes to play practical jokes, often with expensive consequences"
     ],
     references: [
-      Reference.new(name: "Mick Jagger", email: "mick@therollingstones.com"),
-      Reference.new(name: "David Bowie", email: "starman@ziggy.com"),
-      Reference.new(name: "Tom Waits", email: "tom@waits.for.no.one.com")
+      Reference.new(
+        id: SecureRandom.urlsafe_base64,
+        name: "Mick Jagger",
+        email: "mick@therollingstones.com"
+      ),
+      Reference.new(
+        id: SecureRandom.urlsafe_base64,
+        name: "David Bowie",
+        email: "starman@ziggy.com"
+      ),
+      Reference.new(
+        id: SecureRandom.urlsafe_base64,
+        name: "Tom Waits",
+        email: "tom@waits.for.no.one.com"
+      )
     ],
     password: "123",
     password_confirmation: "123"

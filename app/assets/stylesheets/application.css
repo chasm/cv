@@ -56,7 +56,7 @@ legend, h2 {
   color: #5cb85c !important;
 }
 
-#loginform, #resetform, #registerform, #profile {
+#loginform, #resetform, #registerform, #profile, #profileform {
   margin-top: 40px;
 }
 
@@ -97,6 +97,15 @@ legend, h2 {
 
 #toggle-password-field {
   margin-left: 10px;
+}
+
+.edit-button {
+  float: right;
+  margin-top: 26px;
+}
+
+.cancel-button {
+  float: right;
 }
 
 .school, .job {

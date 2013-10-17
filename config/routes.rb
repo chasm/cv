@@ -7,7 +7,6 @@ Cv::Application.routes.draw do
   delete "logout" => "session#destroy"
   
   # User controls
-  get    "profile"      => "user#show"
   get    "profile/edit" => "user#edit"
   put    "profile"      => "user#update"
   patch  "profile"      => "user#update"
