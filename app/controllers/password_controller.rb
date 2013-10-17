@@ -6,6 +6,7 @@ class PasswordController < ApplicationController
     @user = User.find_by(code: params[:code])
     
     if @user and @user.expires_at > Time.now
+      session[:user_id] = nil
       render :edit
     else
       redirect_to login_url, alert: "Reset link has expired. Please try again."

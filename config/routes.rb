@@ -7,21 +7,22 @@ Cv::Application.routes.draw do
   delete "logout" => "session#destroy"
   
   # User controls
+  get  "register/:code" => "user#new", as: :register
+  post "register/:code" => "user#create"
+  
   get    "profile/edit" => "user#edit"
   put    "profile"      => "user#update"
   patch  "profile"      => "user#update"
   delete "profile"      => "user#destroy"
   
-  get  "register/:code" => "user#new", as: :register
-  post "register/:code" => "user#create"
-  
   # Password reset
-  get "reset/:code" => "password#edit", as: :reset
-  put "reset/:code" => "password#update"
+  post "update_password" => "user#update_password"
+  get  "reset/:code"     => "password#edit", as: :reset
+  put  "reset/:code"     => "password#update"
   
   # Legal
   get "privacy" => "site#privacy"
-  get "terms" => "site#terms"
+  get "terms"   => "site#terms"
   
   # You can have the root of your site routed with "root"
   root 'site#index'
