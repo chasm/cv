@@ -11,7 +11,6 @@ Cv::Application.routes.draw do
   post "register/:code" => "user#create"
   
   get    "profile"      => "user#show"
-  get    "profile/edit" => "user#edit"
   put    "profile"      => "user#update"
   patch  "profile"      => "user#update"
   delete "profile"      => "user#destroy"
