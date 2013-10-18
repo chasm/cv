@@ -18,6 +18,10 @@ Cv::Application.routes.draw do
   # Users
   get "cv/:id" => "users#show"
   
+  # Updating the CV
+  put   "address/:id" => "address#update"
+  patch "address/:id" => "address#update"
+  
   # Password reset
   post "update_password" => "user#update_password"
   get  "reset/:code"     => "password#edit", as: :reset

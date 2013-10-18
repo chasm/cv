@@ -1,9 +1,9 @@
 .row
   .col-lg-8
-    h1.editable data-template-name="textfield" data-attribute="user.name" = @user.name
+    h1.editable data-tmpl-name="textfield" data-item-name="profile" data-attr-name="name" = @user.name
     - if @user.respond_to?(:address)
       p.address
-        .editable data-template-name="textarea" data-attribute="address.lines" data-item-id="#{@user.address.id}"
+        .editable data-tmpl-name="textarea" data-item-name="address" data-item-id="#{@user.address.id}" data-attr-name="lines"
           - if @user.address.respond_to?(:lines)
             == @user.address.lines.join('<br>')
     p.contact-info
@@ -117,96 +117,82 @@
               - if ref.respond_to?(:email) && !ref.email.blank?
                 = ": #{ref.email}"
 
-script#textfield-template type="text/x-handlebars-template"
-  input#attribute-updater type="text" value="{{attrValue}}"
+script#textfield-tmpl type="text/x-handlebars-template"
+  input#attr-updater type="text" value="{{attrValue}}"
 
-script#textarea-template type="text/x-handlebars-template"
-  textarea#attribute-updater rows="3" cols="40"
+script#textarea-tmpl type="text/x-handlebars-template"
+  textarea#attr-updater rows="3" cols="40"
     ' {{split attrValue}}
   
 javascript:
   $(function() {
-    var setProfileName = function(name) {
-      $('#user-profile-name').html(name);
-      $('#user-profile-name').on('click', editProfileName);
-    };
-    
-    var updateProfileName = function(event) {
-      var name = $('#profile-name-textbox').val();
-      $.ajax({
-        method: 'PATCH',
-        url: '/profile',
-        contentType: 'application/json',
-        data: JSON.stringify({ name: name }),
-        success: function(data) {
-          console.log(data);
-          setProfileName(data['user']['name']);
-        }
-      });
-    };
-  
-    var editProfileName = function(event) {
-      var name = $(this).html();
-      var html = template({ name: name });
-      $(this).html(html);
-      $('#user-profile-name').off('click');
-      $('#profile-name-textbox').on('blur', updateProfileName);
-      $('#profile-name-textbox').on('keypress', function(event) {
-        if (event.keyCode == 13) {
-          $(this).blur();
-        }
-      });
-      $('#profile-name-textbox').focus();
-    };
     
     Handlebars.registerHelper('split', function(str) {
       return str.replace(/<br>/g,'\n');
     });
     
+    var getTemplate = function(tmplName) {
+      return Handlebars.compile($('#' + tmplName + '-tmpl').html());
+    };
+    
     var setEditableFieds = function() {
       $('.editable').off('click').on('click', setEditMode);
     };
     
-    var insertFormField = function(parent, id, tmpl, attr, val) {
-      var source = $('#' + tmpl + '-template').html();
-      var template = Handlebars.compile(source);
-      var html = template({ attrValue: val });
-      
-      parent.html(html);
-      parent.off('click');
-      
-      var attrUpdater = $('#attribute-updater');
-      
-      attrUpdater.focus();
-      if (tmpl !== 'textarea') {
-        attrUpdater.on('keypress', function(event) {
-          if (event.keyCode == 13) {
-            $(this).blur();
-          }
+    var setBlurOnEnter = function(attrUpdater, tmplName) {
+      if (tmplName !== 'textarea') { 
+        attrUpdater.on('keypress', function(e) {
+          if (e.keyCode == 13) { $(this).blur(); }
         });
       }
+    };
+    
+    var updateAttribute = function(e) {
+      var attrUpdater = $(this);
+      var pElem = $(attrUpdater[0].parentNode);
+      var itemId = pElem.data('item-id');
+      var objName = pElem.data('obj-name');
+      var attrName = pElem.data('attr-name');
+      var tmplName = pElem.data('tmpl-name');
+      var attrValue = attrUpdater.val();
+      var out = {};
+      out[attrName] = attrValue;
       
-      attrUpdater.on('blur', function(e) {
-        var parent = $($(this)[0].parentNode);
-        var itemId = parent.data('item-id');
-        var attribute = parent.data('attribute');
-        var templateName = parent.data('template-name');
-        var attrVal = $(this).val();
-        
-        $(this).remove();
-        parent.html(attrVal.replace(/\n/g, '<br>'));
-        setEditableFieds();
+      $.ajax({
+        url: '/' + attrName,
+        method: 'PATCH',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(out),
+        success: function(data) {
+          console.log('success', data);
+        }
       });
+      
+      attrUpdater.remove();
+      pElem.html(attrValue.replace(/\n/g, '<br>'));
+      setEditableFieds();
+    };
+    
+    var insertFormField = function(pElem, itemId, tmplName, attrName, attrValue) {
+      pElem.html(getTemplate(tmplName)({ attrValue: attrValue }));
+      pElem.off('click');
+      
+      var attrUpdater = $('#attr-updater');
+      
+      attrUpdater.focus();
+      attrUpdater.on('blur', updateAttribute);
+      setBlurOnEnter(attrUpdater, tmplName);
     };
     
     var setEditMode = function(e) {
-      var item = $(this);
-      var itemId = item.data('item-id'); console.log('item-id', itemId);
-      var templateName = item.data('template-name');
-      var attribute = item.data('attribute');
-      var attrValue = item.html();
+      var pElem = $(this);
+      var itemId = pElem.data('item-id');
+      var tmplName = pElem.data('tmpl-name');
+      var attrName = pElem.data('attr-name');
+      var attrValue = pElem.html();
       
-      insertFormField(item, itemId, templateName, attribute, attrValue);
+      insertFormField(pElem, itemId, tmplName, attrName, attrValue);
     };
   
     setEditableFieds();
