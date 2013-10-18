@@ -29,12 +29,9 @@ class UserController < ApplicationController
   end
   
   def update
-    if @user.update_attributes(profile_params)
-      redirect_to root_url, notice: "Your curriculum vitae has been updated."
-    else
-      flash.now.error = "Unable to update your curriculum vitae."
-      render :edit
-    end
+    @user.update_attributes(profile_params)
+    
+    render :json => @user
   end
   
   def destroy

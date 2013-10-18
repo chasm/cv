@@ -12,7 +12,7 @@ Cv::Application.routes.draw do
   
   get    "profile"      => "user#show"
   put    "profile"      => "user#update"
-  patch  "profile"      => "user#update"
+  patch  "profile"      => "user#update", defaults: { format: :json }
   delete "profile"      => "user#destroy"
   
   # Users
