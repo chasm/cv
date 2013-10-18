@@ -9,13 +9,8 @@
     p.contact-info
       - if @user.respond_to?(:phone)
         div.phone = @user.phone
-      div.email = @user.email
-  .col-lg-4
-    #profile-links
-      div
-        = link_to "Reset my password", update_password_url, method: :post
-      div
-        = link_to "Delete my account", profile_url, method: :delete, data: { confirm: "Are your sure?" }
+      div.email
+        a href="mailto:#{@user.email}" = @user.email
 .row
   .col-lg-8
     - if @user.respond_to?(:objective)

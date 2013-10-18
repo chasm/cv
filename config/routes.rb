@@ -1,8 +1,5 @@
 Cv::Application.routes.draw do
   
-  # Schools
-  get "schools/new" => "schools#new"
-  
   # Authentication
   get    "login"  => "session#new"
   post   "login"  => "session#create"
@@ -13,10 +10,14 @@ Cv::Application.routes.draw do
   get  "register/:code" => "user#new", as: :register
   post "register/:code" => "user#create"
   
+  get    "profile"      => "user#show"
   get    "profile/edit" => "user#edit"
   put    "profile"      => "user#update"
   patch  "profile"      => "user#update"
   delete "profile"      => "user#destroy"
+  
+  # Users
+  get "cv/:id" => "users#show"
   
   # Password reset
   post "update_password" => "user#update_password"
