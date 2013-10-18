@@ -3,6 +3,7 @@
 //= require password
 //= require session
 //= require bootstrap
+//= require ./vendor/handlebars
 //= require ./vendor/jquery.noty
 //= require_tree ./vendor/layouts
 //= require_tree ./vendor/themes
