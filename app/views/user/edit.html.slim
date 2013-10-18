@@ -22,37 +22,7 @@
           ' Education
           span.glyphicon.glyphicon-plus.add-school title="Add a new school"
         = f.fields_for(:schools) do |s|
-          .school id="#{s.object.id}"
-            .row
-              .col-lg-6
-                .form-group
-                  = s.label :name, "Name of school"
-                  = s.text_field :name, class: "text clear form-control", placeholder: "Name of school"
-                .form-group
-                  = s.label :address, "Street address"
-                  = s.text_area :address, class: "text clear form-control", placeholder: "Format on multiple lines", value: s.object.address.lines.join("\n")
-                .form-group
-                  = s.label :awards, "Honors and Awards"
-                  = s.text_area :awards, class: "text clear form-control", placeholder: "Add one award per line", value: s.object.awards.join("\n")
-                .form-group
-                  = s.label :activities, "Activities"
-                  = s.text_area :activities, class: "text clear form-control", placeholder: "Add one activity per line", value: s.object.activities.join("\n")
-              .col-lg-4
-                .form-group
-                  = s.label :started_on, "From"
-                  = f.text_field :started_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.object.started_on.strftime("%B %Y")
-                .form-group
-                  = s.label :left_on, "To"
-                  = f.text_field :left_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.object.left_on.strftime("%B %Y")
-                .form-group
-                  = s.label :highest_grade_completed, "Highest grade completed"
-                  = s.text_field :highest_grade_completed, class: "text clear form-control", placeholder: "Highest grade completed"
-                .checkbox
-                  = s.label :graduated, "Graduated?"
-                  => s.check_box :graduated
-              .col-lg-2
-                .form-group.remove-icon
-                  span.glyphicon.glyphicon-remove.remove-school title="Remove #{s.object.name}" data-id="#{s.object.id}"
+          = render partial: "site/school", locals: { s: s }
       .row
         .col-lg-12
           .form-group
