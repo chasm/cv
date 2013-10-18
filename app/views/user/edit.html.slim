@@ -22,7 +22,7 @@
           ' Education
           span.glyphicon.glyphicon-plus.add-school title="Add a new school"
         = f.fields_for(:schools) do |s|
-          .school
+          .school id="#{s.object.id}"
             .row
               .col-lg-6
                 .form-group
@@ -52,7 +52,7 @@
                   => s.check_box :graduated
               .col-lg-2
                 .form-group.remove-icon
-                  span.glyphicon.glyphicon-remove.remove-school title="Remove #{s.object.name}"
+                  span.glyphicon.glyphicon-remove.remove-school title="Remove #{s.object.name}" data-id="#{s.object.id}"
       .row
         .col-lg-12
           .form-group
@@ -62,4 +62,8 @@
 javascript:
   $(function() {
     $('.datepicker').datetimepicker({startView: 3, minView: 3, autoclose: true});
+    
+    $('.remove-school').on('click', function(event) {
+      $('#' + $(this).data('id')).remove();
+    });
   });

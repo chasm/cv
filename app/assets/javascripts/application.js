@@ -11,6 +11,8 @@
 //= require ./vendor/datetimepicker
 
 $(function() {
+  // Add deletion confirmation dialog modals
+  
   $('a.delete-link').click(function(event) {
     $('#delete-warning').html('Are you certain that you wish to delete your account? This action cannot be undone.');
     $('#delete-modal').modal('show');
