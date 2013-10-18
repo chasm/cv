@@ -3,13 +3,12 @@
     h1.editable data-tmpl-name="textfield" data-item-name="profile" data-attr-name="name" = @user.name
     - if @user.respond_to?(:address)
       p.address
-        .editable data-tmpl-name="textarea" data-item-name="address" data-item-id="#{@user.address.id}" data-attr-name="lines"
-          - if @user.address.respond_to?(:lines)
-            == @user.address.lines.join('<br>')
+        .editable data-tmpl-name="lines" data-item-name="profile" data-attr-name="address"
+          == @user.address.join('<br>')
     p.contact-info
       - if @user.respond_to?(:phone)
-        div.phone = @user.phone
-      div.email = @user.email
+        div.phone.editable data-tmpl-name="textfield" data-item-name="profile" data-attr-name="phone" = @user.phone
+      div.email.editable data-tmpl-name="textfield" data-item-name="profile" data-attr-name="email" = @user.email
   .col-lg-4
     #profile-links
       p = link_to "Reset password", update_password_url, method: :post, class: "btn btn-warning"
@@ -18,7 +17,7 @@
   .col-lg-8
     - if @user.respond_to?(:objective)
       h2 Objective 
-      p.objective = @user.objective
+      p.objective.editable data-tmpl-name="textarea" data-item-name="profile" data-attr-name="objective" = @user.objective
 .row
   .col-lg-8
     - if @user.respond_to?(:schools)
@@ -102,7 +101,7 @@
   .col-lg-8
     - if @user.respond_to?(:skills) && !@user.skills.empty?
       h2 Skills 
-      ul
+      ul.editable data-tmpl-name="list" data-item-name="profile" data-attr-name="skills"
         - @user.skills.each do |skill|
           li = skill
 .row
@@ -121,14 +120,26 @@ script#textfield-tmpl type="text/x-handlebars-template"
   input#attr-updater type="text" value="{{attrValue}}"
 
 script#textarea-tmpl type="text/x-handlebars-template"
+  textarea#attr-updater rows="3" cols="80"
+    ' {{attrValue}}
+
+script#lines-tmpl type="text/x-handlebars-template"
   textarea#attr-updater rows="3" cols="40"
     ' {{split attrValue}}
+
+script#list-tmpl type="text/x-handlebars-template"
+  textarea#attr-updater rows="5" cols="80"
+    ' {{bullet attrValue}}
   
 javascript:
   $(function() {
     
     Handlebars.registerHelper('split', function(str) {
       return str.replace(/<br>/g,'\n');
+    });
+    
+    Handlebars.registerHelper('bullet', function(str) {
+      return str.replace(/^<li>/, '').replace(/<\/li>$/, '').replace(/<\/li><li>/g,'\n');
     });
     
     var getTemplate = function(tmplName) {
@@ -140,7 +151,7 @@ javascript:
     };
     
     var setBlurOnEnter = function(attrUpdater, tmplName) {
-      if (tmplName !== 'textarea') { 
+      if (tmplName !== 'lines' && tmplName !== 'list') { 
         attrUpdater.on('keypress', function(e) {
           if (e.keyCode == 13) { $(this).blur(); }
         });
@@ -150,8 +161,8 @@ javascript:
     var updateAttribute = function(e) {
       var attrUpdater = $(this);
       var pElem = $(attrUpdater[0].parentNode);
+      var itemName = pElem.data('item-name');
       var itemId = pElem.data('item-id');
-      var objName = pElem.data('obj-name');
       var attrName = pElem.data('attr-name');
       var tmplName = pElem.data('tmpl-name');
       var attrValue = attrUpdater.val();
@@ -159,19 +170,27 @@ javascript:
       out[attrName] = attrValue;
       
       $.ajax({
-        url: '/' + attrName,
+        url: '/' + itemName,
         method: 'PATCH',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(out),
         success: function(data) {
-          console.log('success', data);
+          var obj = data['user'][attrName];
+          
+          if (tmplName === 'lines') {
+            obj = obj.join('<br>');
+          } else if (tmplName === 'list') {
+            obj = $.map(obj, function(item) {
+              return '<li>' + item + '</li>';
+            });
+          }
+          
+          attrUpdater.remove();
+          pElem.html(obj);
+          setEditableFieds();
         }
       });
-      
-      attrUpdater.remove();
-      pElem.html(attrValue.replace(/\n/g, '<br>'));
-      setEditableFieds();
     };
     
     var insertFormField = function(pElem, itemId, tmplName, attrName, attrValue) {

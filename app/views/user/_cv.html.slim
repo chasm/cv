@@ -3,9 +3,7 @@
     h1 = @user.name
     - if @user.respond_to?(:address)
       p.address
-        - if @user.address.respond_to?(:lines)
-          - @user.address.lines.each do |line|
-            div = line
+        == @user.address.join('<br>')
     p.contact-info
       - if @user.respond_to?(:phone)
         div.phone = @user.phone

@@ -23,27 +23,21 @@ User.create([
     email: "tommy@munat.com",
     phone: "202.5555.4444",
     objective: "To obtain work in a highly-paid sinecure somewhere in the entertainment or food and beverage industries.",
-    address: Address.new(
-      id: SecureRandom.urlsafe_base64,
-      lines: [
-        "123 Rocker Road",
-        "Punkville, Texas 00666",
-        "U.S.A."
-      ]
-    ),
+    address: [
+      "123 Rocker Road",
+      "Punkville, Texas 00666",
+      "U.S.A."
+    ],
     schools: [
       School.new(
         id: SecureRandom.urlsafe_base64,
         name: "Watson Elementary School",
         started_on: Date.new(1987,9),
         left_on: Date.new(1999,5),
-        address: Address.new(
-          id: SecureRandom.urlsafe_base64,
-          lines: [
-    				"221B Baker Street",
-    				"London, England"
-          ]
-        ),
+        address: [
+  				"221B Baker Street",
+  				"London, England"
+        ],
         highest_grade_completed: "4th",
   			graduated: false
       ),
@@ -52,13 +46,10 @@ User.create([
         name: "Vince Lombardi High School",
         started_on: Date.new(1999,9),
         left_on: Date.new(2005,5),
-        address: Address.new(
-          id: SecureRandom.urlsafe_base64,
-          lines: [
-    				"4 Ramones Road",
-    				"Hollywood, California 90210"
-          ]
-        ),
+        address: [
+  				"4 Ramones Road",
+  				"Hollywood, California 90210"
+        ],
         highest_grade_completed: "9th",
   			graduated: false,
   			awards: [ "Most Likely to Fail" ]
@@ -68,13 +59,10 @@ User.create([
         name: "Faber College",
         started_on: Date.new(2005,9),
         left_on: Date.new(2011,5),
-        address: Address.new(
-          id: SecureRandom.urlsafe_base64,
-          lines: [
-    				"99 Delta House Drive",
-    				"Belushi, New Hampshire 00001"
-          ]
-        ),
+        address: [
+  				"99 Delta House Drive",
+  				"Belushi, New Hampshire 00001"
+        ],
         highest_grade_completed: "None",
   			graduated: false,
   			activities: [ "Delta Tau Chi pledge" ]
@@ -87,13 +75,10 @@ User.create([
         company: "Wonka Industries",
         started_on: Date.new(2011,6),
         left_on: Date.new(2011,7),
-        address: Address.new(
-          id: SecureRandom.urlsafe_base64,
-          lines: [
-            "7 Willy Woods",
-            "Hershey, Pennsylvania 55555"
-          ]
-        ),
+        address: [
+          "7 Willy Woods",
+          "Hershey, Pennsylvania 55555"
+        ],
         duties: [
           "Hiding from the boss",
           "Pilfering company property",
@@ -108,13 +93,10 @@ User.create([
         position: "Fluffer",
         company: "Wanker Industries",
         started_on: Date.new(2011,6),
-        address: Address.new(
-          id: SecureRandom.urlsafe_base64,
-          lines: [
-            "12 Willy Woods",
-            "Hershey, Pennsylvania 55555"
-          ]
-        ),
+        address: [
+          "12 Willy Woods",
+          "Hershey, Pennsylvania 55555"
+        ],
         duties: [
           "Would rather not say"
         ]

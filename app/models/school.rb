@@ -1,10 +1,9 @@
 class School
   include Mongoid::Document
   
-  embeds_one :address
-  
   field :id, type: String
   field :name, type: String
+  field :address, type: Array
   field :started_on, type: Date
   field :left_on, type: Date
   field :highest_grade_completed, type: String

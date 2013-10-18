@@ -2,13 +2,11 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  embeds_one :address
   embeds_many :schools
   embeds_many :jobs
   embeds_many :honors
   embeds_many :references
 
-  accepts_nested_attributes_for :address
   accepts_nested_attributes_for :schools
   accepts_nested_attributes_for :jobs
   accepts_nested_attributes_for :honors
@@ -18,6 +16,7 @@ class User
   
   field :id, type: String
   field :name, type: String
+  field :address, type: Array
   field :email, type: String
   field :phone, type: String
   field :objective, type: String

@@ -29,9 +29,18 @@ class UserController < ApplicationController
   end
   
   def update
-    @user.update_attributes(profile_params)
+    @user.name = params[:user][:name] if params[:user][:name]
+    @user.address = params[:user][:address].split("\n").map(&:strip).reject(&:empty?) if params[:user][:address]
+    @user.phone = params[:user][:phone] if params[:user][:phone]
+    @user.email = params[:user][:email] if params[:user][:email]
+    @user.objective = params[:user][:objective] if params[:user][:objective]
+    @user.skills = params[:user][:skills].split("\n").map(&:strip).reject(&:empty?) if params[:user][:skills]
     
-    render :json => @user
+    if @user.save
+      render :json => @user, status: :ok
+    else
+      render :json => @user, status: :unprocessable_entity 
+    end
   end
   
   def destroy
@@ -70,14 +79,6 @@ class UserController < ApplicationController
       :name,
       :password,
       :password_confirmation
-    )
-  end
-  
-  def profile_params
-    params.require(:user).permit(
-      :name,
-      :phone,
-      :objective
     )
   end
 end
