@@ -88,11 +88,11 @@ legend, h2 {
 
 #match-div {
   font-weight: bold;
-  color: @red;
+  color: #d9534f;
 }
 
 #match-div.match {
-  color: @green;
+  color: #5cb85c;
 }
 
 #toggle-password-field {
@@ -111,6 +111,32 @@ legend, h2 {
 
 .cancel-button {
   float: right;
+}
+
+.add-school, .add-job {
+  font-size: 16px;
+  font-weight: normal;
+  color: #b8b8b8;
+}
+
+.remove-icon {
+  text-align: right;
+}
+
+.remove-school, .remove-job {
+  font-size: 20px;
+  font-weight: normal;
+  color: #b8b8b8;
+}
+
+.add-school:hover,
+.add-job:hover {
+  color: #5cb85c;
+}
+
+.remove-school:hover,
+.remove-job:hover {
+  color: #d9534f;
 }
 
 .school, .job {

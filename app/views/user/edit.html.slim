@@ -1,6 +1,6 @@
 #profileform.row
   .col-lg-8
-    = form_for :user, url: profile_url, method: "PATCH", html: { role: "form", autocomplete: :off } do |f|
+    = form_for @user, url: profile_url, method: "PATCH", html: { role: "form", autocomplete: :off } do |f|
       legend Update your curriculum vitae
       .row
         .col-lg-6
@@ -17,8 +17,49 @@
           .form-group
             = f.label :objective, "Objective"
             = f.text_area :objective, autofocus: true, rows: 3, class: "text clear form-control", placeholder: "Objective"
+      fieldset
+        legend
+          ' Education
+          span.glyphicon.glyphicon-plus.add-school title="Add a new school"
+        = f.fields_for(:schools) do |s|
+          .school
+            .row
+              .col-lg-6
+                .form-group
+                  = s.label :name, "Name of school"
+                  = s.text_field :name, class: "text clear form-control", placeholder: "Name of school"
+                .form-group
+                  = s.label :address, "Street address"
+                  = s.text_area :address, class: "text clear form-control", placeholder: "Format on multiple lines", value: s.object.address.lines.join("\n")
+                .form-group
+                  = s.label :awards, "Honors and Awards"
+                  = s.text_area :awards, class: "text clear form-control", placeholder: "Add one award per line", value: s.object.awards.join("\n")
+                .form-group
+                  = s.label :activities, "Activities"
+                  = s.text_area :activities, class: "text clear form-control", placeholder: "Add one activity per line", value: s.object.activities.join("\n")
+              .col-lg-4
+                .form-group
+                  = s.label :started_on, "From"
+                  = f.text_field :started_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.object.started_on.strftime("%B %Y")
+                .form-group
+                  = s.label :left_on, "To"
+                  = f.text_field :left_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.object.left_on.strftime("%B %Y")
+                .form-group
+                  = s.label :highest_grade_completed, "Highest grade completed"
+                  = s.text_field :highest_grade_completed, class: "text clear form-control", placeholder: "Highest grade completed"
+                .checkbox
+                  = s.label :graduated, "Graduated?"
+                  => s.check_box :graduated
+              .col-lg-2
+                .form-group.remove-icon
+                  span.glyphicon.glyphicon-remove.remove-school title="Remove #{s.object.name}"
       .row
         .col-lg-12
           .form-group
             => f.submit "Save changes", id: "save-profile", class: "btn btn-danger"
             =< link_to "Cancel", root_url, class: "btn btn-warning"
+
+javascript:
+  $(function() {
+    $('.datepicker').datetimepicker({startView: 3, minView: 3, autoclose: true});
+  });
