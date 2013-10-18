@@ -1,31 +1,31 @@
-.school id="#{s.object.id}"
+.school id="#{s.id}"
   .row
     .col-lg-6
       .form-group
-        = s.label :name, "Name of school"
-        = s.text_field :name, class: "text clear form-control", placeholder: "Name of school"
+        = label [ current_user, :school ], :name, "Name of school"
+        = text_field :school, :name, class: "text clear form-control", placeholder: "Name of school", value: s.name
       .form-group
-        = s.label :address, "Street address"
-        = s.text_area :address, class: "text clear form-control", placeholder: "Format on multiple lines", value: s.object.address.lines.join("\n")
+        = label :school, :address, "Street address"
+        = text_area :school, :address, class: "text clear form-control", placeholder: "Format on multiple lines", value: s.address.lines.join("\n")
       .form-group
-        = s.label :awards, "Honors and Awards"
-        = s.text_area :awards, class: "text clear form-control", placeholder: "Add one award per line", value: s.object.awards.join("\n")
+        = label :school, :awards, "Honors and Awards"
+        = text_area :school, :awards, class: "text clear form-control", placeholder: "Add one award per line", value: s.awards.join("\n")
       .form-group
-        = s.label :activities, "Activities"
-        = s.text_area :activities, class: "text clear form-control", placeholder: "Add one activity per line", value: s.object.activities.join("\n")
+        = label :school, :activities, "Activities"
+        = text_area :school, :activities, class: "text clear form-control", placeholder: "Add one activity per line", value: s.activities.join("\n")
     .col-lg-4
       .form-group
-        = s.label :started_on, "From"
-        = s.text_field :started_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.object.started_on.strftime("%B %Y")
+        = label :school, :started_on, "From"
+        = text_field :school, :started_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.started_on.strftime("%B %Y") if s.started_on
       .form-group
-        = s.label :left_on, "To"
-        = s.text_field :left_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.object.left_on.strftime("%B %Y")
+        = label :school, :left_on, "To"
+        = text_field :school, :left_on, class: "form-control datepicker", data: { "date-format" => "MM yyyy" }, value: s.left_on.strftime("%B %Y") if s.started_on
       .form-group
-        = s.label :highest_grade_completed, "Highest grade completed"
-        = s.text_field :highest_grade_completed, class: "text clear form-control", placeholder: "Highest grade completed"
+        = label :school, :highest_grade_completed, "Highest grade completed"
+        = text_field :school, :highest_grade_completed, class: "text clear form-control", placeholder: "Highest grade completed", value: s.highest_grade_completed
       .checkbox
-        = s.label :graduated, "Graduated?"
-        => s.check_box :graduated
+        = label :school, :graduated, "Graduated?"
+        => check_box :school, :graduated
     .col-lg-2
       .form-group.remove-icon
-        span.glyphicon.glyphicon-remove.remove-school title="Remove #{s.object.name}" data-id="#{s.object.id}"
+        span.glyphicon.glyphicon-remove.remove-school title="Remove #{s.name}" data-id="#{s.id}"

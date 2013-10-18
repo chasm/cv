@@ -22,7 +22,7 @@
           ' Education
           span.glyphicon.glyphicon-plus.add-school title="Add a new school"
         = f.fields_for(:schools) do |s|
-          = render partial: "site/school", locals: { s: s }
+          = render partial: "site/school", locals: { s: s.object }
       .row
         .col-lg-12
           .form-group

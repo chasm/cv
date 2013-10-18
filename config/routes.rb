@@ -1,5 +1,8 @@
 Cv::Application.routes.draw do
   
+  # Schools
+  get "schools/new" => "schools#new"
+  
   # Authentication
   get    "login"  => "session#new"
   post   "login"  => "session#create"
