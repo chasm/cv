@@ -1,11 +1,11 @@
 .row
   .col-lg-8
-    h1#user-profile-name = @user.name
+    h1.editable data-template-name="textfield" data-attribute="user.name" = @user.name
     - if @user.respond_to?(:address)
       p.address
-        - if @user.address.respond_to?(:lines)
-          - @user.address.lines.each do |line|
-            div = line
+        .editable data-template-name="textarea" data-attribute="address.lines" data-item-id="#{@user.address.id}"
+          - if @user.address.respond_to?(:lines)
+            == @user.address.lines.join('<br>')
     p.contact-info
       - if @user.respond_to?(:phone)
         div.phone = @user.phone
@@ -117,8 +117,12 @@
               - if ref.respond_to?(:email) && !ref.email.blank?
                 = ": #{ref.email}"
 
-script#name-template type="text/x-handlebars-template"
-  input#profile-name-textbox type="text" value="{{name}}"
+script#textfield-template type="text/x-handlebars-template"
+  input#attribute-updater type="text" value="{{attrValue}}"
+
+script#textarea-template type="text/x-handlebars-template"
+  textarea#attribute-updater rows="3" cols="40"
+    ' {{split attrValue}}
   
 javascript:
   $(function() {
@@ -142,8 +146,6 @@ javascript:
     };
   
     var editProfileName = function(event) {
-      var source = $('#name-template').html();
-      var template = Handlebars.compile(source);
       var name = $(this).html();
       var html = template({ name: name });
       $(this).html(html);
@@ -156,6 +158,56 @@ javascript:
       });
       $('#profile-name-textbox').focus();
     };
+    
+    Handlebars.registerHelper('split', function(str) {
+      return str.replace(/<br>/g,'\n');
+    });
+    
+    var setEditableFieds = function() {
+      $('.editable').off('click').on('click', setEditMode);
+    };
+    
+    var insertFormField = function(parent, id, tmpl, attr, val) {
+      var source = $('#' + tmpl + '-template').html();
+      var template = Handlebars.compile(source);
+      var html = template({ attrValue: val });
+      
+      parent.html(html);
+      parent.off('click');
+      
+      var attrUpdater = $('#attribute-updater');
+      
+      attrUpdater.focus();
+      if (tmpl !== 'textarea') {
+        attrUpdater.on('keypress', function(event) {
+          if (event.keyCode == 13) {
+            $(this).blur();
+          }
+        });
+      }
+      
+      attrUpdater.on('blur', function(e) {
+        var parent = $($(this)[0].parentNode);
+        var itemId = parent.data('item-id');
+        var attribute = parent.data('attribute');
+        var templateName = parent.data('template-name');
+        var attrVal = $(this).val();
+        
+        $(this).remove();
+        parent.html(attrVal.replace(/\n/g, '<br>'));
+        setEditableFieds();
+      });
+    };
+    
+    var setEditMode = function(e) {
+      var item = $(this);
+      var itemId = item.data('item-id'); console.log('item-id', itemId);
+      var templateName = item.data('template-name');
+      var attribute = item.data('attribute');
+      var attrValue = item.html();
+      
+      insertFormField(item, itemId, templateName, attribute, attrValue);
+    };
   
-    $('#user-profile-name').on('click', editProfileName);
+    setEditableFieds();
   });
