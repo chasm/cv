@@ -2,8 +2,9 @@ class UserController < ApplicationController
   before_action :is_authenticated
   before_action :get_user
   
+  respond_to :json
+  
   def show
-    render json: @user
   end
   
   def update
