@@ -102,6 +102,23 @@ User.create([
         ]
       )
     ],
+    awards: [
+      Award.new(
+        id: SecureRandom.urlsafe_base64,
+        name: "Academy Award for Best Shirt",
+        awarded_on: Date.new(2012,1)
+      ),
+      Award.new(
+        id: SecureRandom.urlsafe_base64,
+        name: "Pulitzer Prize for Bloggerism",
+        awarded_on: Date.new(2011,6)
+      ),
+      Award.new(
+        id: SecureRandom.urlsafe_base64,
+        name: "Nobel Prize for Twitterature",
+        awarded_on: Date.new(2013,3)
+      )
+    ],
     skills: [
       "Able to avoid work even when the boss is watching",
       "Known to offend co-workers with off-color jokes",

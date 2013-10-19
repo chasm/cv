@@ -4,13 +4,8 @@ class User
   
   embeds_many :schools
   embeds_many :jobs
-  embeds_many :honors
+  embeds_many :awards
   embeds_many :references
-
-  accepts_nested_attributes_for :schools
-  accepts_nested_attributes_for :jobs
-  accepts_nested_attributes_for :honors
-  accepts_nested_attributes_for :references
   
   attr_accessor :password, :password_confirmation
   

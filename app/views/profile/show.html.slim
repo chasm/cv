@@ -91,12 +91,11 @@
       h2 Honors and Awards 
       ul
         - @user.awards.each do |award|
-          - if award.respond_to?(:title)
+          - if award.respond_to?(:name)
             li 
-              strong = award.title
+              strong = award.name
               - if award.respond_to?(:awarded_on) && !award.awarded_on.blank?
-                br
-                = award.awarded_on.strftime("%B %Y")
+                = ", #{award.awarded_on.strftime("%B %Y")}"
 .row
   .col-lg-8
     - if @user.respond_to?(:skills) && !@user.skills.empty?
