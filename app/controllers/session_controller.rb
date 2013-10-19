@@ -3,15 +3,8 @@ class SessionController < ApplicationController
   
   def new
     @title = "Sign In"
-    @request = request
     
-    if current_user
-      redirect_to root_url
-    else
-      @user = User.new
-    
-      render :new
-    end
+    redirect_to root_url if current_user
   end
 
   def create

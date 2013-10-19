@@ -56,7 +56,6 @@ class User
     if password.present?
       self.salt = BCrypt::Engine.generate_salt
       self.fish = BCrypt::Engine.hash_secret(password, self.salt)
-      password = nil
     end
   end
 end

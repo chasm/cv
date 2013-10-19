@@ -207,6 +207,15 @@ span.navbar-brand:hover {
   font-style: italic;
 }
 
+.hint {
+  font-style: italic;
+  color: #777777;
+}
+
+.hint:before {
+  content: '* ';
+}
+
 /* Set the fixed height of the footer here */
 #footer {
   text-align: right;

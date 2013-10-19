@@ -1,217 +1,121 @@
-.row
-  .col-lg-8
-    h1.editable data-tmpl-name="textfield" data-item-name="profile" data-attr-name="name" = @user.name
-    - if @user.respond_to?(:address)
+#user
+
+script#user-tmpl type="text/x-handlebars-template"
+  .row
+    .col-lg-8
+      h1 
+        | {{name}}
       p.address
-        .editable data-tmpl-name="lines" data-item-name="profile" data-attr-name="address"
-          == @user.address.join('<br>')
-    p.contact-info
-      - if @user.respond_to?(:phone)
-        div.phone.editable data-tmpl-name="textfield" data-item-name="profile" data-attr-name="phone" = @user.phone
-      div.email.editable data-tmpl-name="textfield" data-item-name="profile" data-attr-name="email" = @user.email
-  .col-lg-4
-    #profile-links
-      p = link_to "Reset password", update_password_url, method: :post, class: "btn btn-warning"
-      p = link_to "Delete account", profile_url, method: :delete, data: { confirm: "Are your sure?" }, class: "btn btn-danger"
-.row
-  .col-lg-8
-    - if @user.respond_to?(:objective)
+        | {{#if address}}{{{lionize address}}}{{else}}
+        span.hint Add an address
+        | {{/if}}
+      p.contact-info
+        .phone
+          | {{#if phone}}{{phone}}{{else}}
+          span.hint Add a phone number
+          | {{/if}}
+        .email
+          | {{email}}
+  .row
+    .col-lg-8
       h2 Objective 
-      p.objective.editable data-tmpl-name="textarea" data-item-name="profile" data-attr-name="objective" = @user.objective
-.row
-  .col-lg-8
-    - if @user.respond_to?(:schools)
+      p.objective
+        | {{#if objective}}{{objective}}{{else}}
+        span.hint Add an objective
+        | {{/if}}
+  .row
+    .col-lg-8
       h2 Education
-      - @user.schools.each do |school|
-        .school
-          p.dates
-            - if school.respond_to?(:started_on) && !school.started_on.blank?
-              span.from => school.started_on.strftime("%B %Y")
-              ' -
-            - if school.respond_to?(:left_on) && !school.left_on.blank?
-              span.from = school.left_on.strftime("%B %Y")
-            - else
-              ' present
-            p.address
-              strong = school.name
-              - if school.respond_to?(:address)
-                - if school.address.respond_to?(:lines)
-                  - school.address.lines.each do |line|
-                    div = line
-          p
-            - if school.respond_to?(:highest_grade_completed) && !school.highest_grade_completed.blank?
-              div
-                strong Highest grade completed:
-                =< school.highest_grade_completed
-            - if school.respond_to?(:graduated)
-              div
-                strong Graduated?
-                =< school.graduated ? "Yes" : "No"
-            - if school.respond_to?(:awards) && !school.awards.empty?
-              div
-                strong Awards:
-                =< school.awards.join("; ")
-            - if school.respond_to?(:activities) && !school.activities.empty?
-              div
-                strong Activities:
-                =< school.activities.join("; ")
-.row
-  .col-lg-8
-    - if @user.respond_to?(:jobs)
+      | {{#each schools}}
+      .school
+        p.dates
+          span.from
+            | {{from started_on}}
+          ' -
+          span.to
+            | {{to left_on}}
+        p.address
+          strong
+            | {{name}}
+          br
+          | {{{lionize address}}}
+        p
+          | {{#if highest_grade_completed}}
+          #highest-grade-completed
+            strong> Highest grade completed:
+            ' {{highest_grade_completed}}
+          | {{/if}}
+          | {{#if graduated}}
+          #graduated
+            strong> Graduated?
+            ' {{graduated}}
+          | {{/if}}
+          | {{#if awards}}
+          #awards
+            strong> Awards:
+            ' {{{lionize awards}}}
+          | {{/if}}
+          | {{#if activities}}
+          #activities
+            strong> Activities:
+            ' {{{lionize activities}}}
+          | {{/if}}
+      | {{/each}}
+  .row
+    .col-lg-8
       h2 Work Experience
-      - @user.jobs.each do |job|
-        .job
-          p.dates
-            - if job.respond_to?(:started_on) && !job.started_on.blank?
-              span.from => job.started_on.strftime("%B %Y")
-              ' -
-            - if job.respond_to?(:left_on) && !job.left_on.blank?
-              span.from = job.left_on.strftime("%B %Y")
-            - else
-              ' present
-          - if job.respond_to?(:address)
-            p.address
-              strong
-                - if job.respond_to?(:position)
-                  = "#{job.position}, "
-                - if job.respond_to?(:company)
-                  = job.company
-              - if job.address.respond_to?(:lines)
-                - job.address.lines.each do |line|
-                  div = line
-          - if job.respond_to?(:duties) && !job.duties.empty?
-              p
-                strong Duties:
-              ul
-                - job.duties.each do |duty|
-                  li = duty
-.row
-  .col-lg-8
-    - if @user.respond_to?(:awards) && !@user.awards.empty?
-      h2 Honors and Awards 
-      ul
-        - @user.awards.each do |award|
-          - if award.respond_to?(:name)
-            li 
-              strong = award.name
-              - if award.respond_to?(:awarded_on) && !award.awarded_on.blank?
-                = ", #{award.awarded_on.strftime("%B %Y")}"
-.row
-  .col-lg-8
-    - if @user.respond_to?(:skills) && !@user.skills.empty?
-      h2 Skills 
-      ul.editable data-tmpl-name="list" data-item-name="profile" data-attr-name="skills"
-        - @user.skills.each do |skill|
-          li = skill
-.row
-  .col-lg-8
-    - if @user.respond_to?(:references) && !@user.references.empty?
-      h2 References 
-      ul
-        - @user.references.each do |ref|
-          - if ref.respond_to?(:name) && !ref.name.blank?
-            li
-              strong = ref.name
-              - if ref.respond_to?(:email) && !ref.email.blank?
-                = ": #{ref.email}"
-
-script#textfield-tmpl type="text/x-handlebars-template"
-  input#attr-updater type="text" value="{{attrValue}}"
-
-script#textarea-tmpl type="text/x-handlebars-template"
-  textarea#attr-updater rows="3" cols="80"
-    ' {{attrValue}}
-
-script#lines-tmpl type="text/x-handlebars-template"
-  textarea#attr-updater rows="3" cols="40"
-    ' {{split attrValue}}
-
-script#list-tmpl type="text/x-handlebars-template"
-  textarea#attr-updater rows="5" cols="80"
-    ' {{bullet attrValue}}
-  
+      | {{#each jobs}}
+      .job
+        p.dates
+          span.from
+            | {{from started_on}}
+          ' -
+          span.to
+            | {{to left_on}}
+        p.address
+          strong
+            | {{#if position}}{{position}},{{/if}} {{company}}
+          br
+          | {{{lionize address}}}
+        p
+          | {{#if duties}}
+          #duties
+            strong> Duties:
+            ul
+              | {{{listify duties}}}
+          | {{/if}}
+      | {{/each}}
+      
+    
 javascript:
+  Handlebars.registerHelper('lionize', function(arr) {
+    return arr.join('<br>');
+  });
+
+  Handlebars.registerHelper('listify', function(arr) {
+    return '<li>' + arr.join('</li><li>') + '</li>';
+  });
+
+  Handlebars.registerHelper('from', function(dt) {
+    return moment(dt).format('MMM YYYY');
+  });
+
+  Handlebars.registerHelper('to', function(dt) {
+    return dt ? moment(dt).format('MMM YYYY') : 'present';
+  });
+
   $(function() {
-    
-    Handlebars.registerHelper('split', function(str) {
-      return str.replace(/<br>/g,'\n');
-    });
-    
-    Handlebars.registerHelper('bullet', function(str) {
-      return str.replace(/^<li>/, '').replace(/<\/li>$/, '').replace(/<\/li><li>/g,'\n');
-    });
-    
-    var getTemplate = function(tmplName) {
-      return Handlebars.compile($('#' + tmplName + '-tmpl').html());
-    };
-    
-    var setEditableFieds = function() {
-      $('.editable').off('click').on('click', setEditMode);
-    };
-    
-    var setBlurOnEnter = function(attrUpdater, tmplName) {
-      if (tmplName !== 'lines' && tmplName !== 'list' && tmplName !== 'textarea') { 
-        attrUpdater.on('keypress', function(e) {
-          if (e.keyCode == 13) { $(this).blur(); }
-        });
+    $.ajax({
+      url: '/api/user',
+      method: 'GET',
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function(data) {
+        var user = data["user"];
+        console.log('success', user.name);
+        
+        var template = Handlebars.compile($('#user-tmpl').html());
+        $('#user').html(template(user));
       }
-    };
-    
-    var updateAttribute = function(e) {
-      var attrUpdater = $(this);
-      var pElem = $(attrUpdater[0].parentNode);
-      var itemName = pElem.data('item-name');
-      var itemId = pElem.data('item-id');
-      var attrName = pElem.data('attr-name');
-      var tmplName = pElem.data('tmpl-name');
-      var attrValue = attrUpdater.val();
-      var out = {};
-      out[attrName] = attrValue;
-      
-      $.ajax({
-        url: '/' + itemName,
-        method: 'PATCH',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify(out),
-        success: function(data) {
-          var obj = data['user'][attrName];
-          
-          if (tmplName === 'lines') {
-            obj = obj.join('<br>');
-          } else if (tmplName === 'list') {
-            obj = $.map(obj, function(item) {
-              return '<li>' + item + '</li>';
-            });
-          }
-          
-          attrUpdater.remove();
-          pElem.html(obj);
-          setEditableFieds();
-        }
-      });
-    };
-    
-    var insertFormField = function(pElem, itemId, tmplName, attrName, attrValue) {
-      pElem.html(getTemplate(tmplName)({ attrValue: attrValue }));
-      pElem.off('click');
-      
-      var attrUpdater = $('#attr-updater');
-      
-      attrUpdater.focus();
-      attrUpdater.on('blur', updateAttribute);
-      setBlurOnEnter(attrUpdater, tmplName);
-    };
-    
-    var setEditMode = function(e) {
-      var pElem = $(this);
-      var itemId = pElem.data('item-id');
-      var tmplName = pElem.data('tmpl-name');
-      var attrName = pElem.data('attr-name');
-      var attrValue = pElem.html();
-      
-      insertFormField(pElem, itemId, tmplName, attrName, attrValue);
-    };
-  
-    setEditableFieds();
+    });
   });
