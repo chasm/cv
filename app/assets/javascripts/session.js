@@ -19,6 +19,8 @@ $(function() {
       }
       $('#loginform legend').html('Please enter your email address');
     }
+
+    $('#user_email').focus();
     
     event.preventDefault();
   });

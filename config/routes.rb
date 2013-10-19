@@ -7,23 +7,28 @@ Cv::Application.routes.draw do
   delete "logout" => "session#destroy"
   
   # User controls
-  get  "register/:code" => "user#new", as: :register
-  post "register/:code" => "user#create"
+  get  "register/:code" => "registration#new", as: :register
+  post "register/:code" => "registration#create"
   
-  get    "profile"      => "user#show"
-  put    "profile"      => "user#update"
-  patch  "profile"      => "user#update", defaults: { format: :json }
-  delete "profile"      => "user#destroy"
+  get    "profile"      => "profile#show"
+  put    "profile"      => "profile#update"
+  patch  "profile"      => "profile#update", defaults: { format: :json }
+  delete "profile"      => "profile#destroy"
   
-  # Users
-  get "cv/:id" => "users#show"
+  # Public CV
+  get "cv/:id" => "profile#show"
   
-  # Updating the CV
-  put   "address/:id" => "address#update"
-  patch "address/:id" => "address#update"
+  # CV API
+  scope :api do
+    get   "uuids"      => "user#uuids", defaults: { format: :json }
+    get   "uuids/:num" => "user#uuids", defaults: { format: :json }
+    get   "user"       => "user#show", defaults: { format: :json }
+    put   "user"       => "user#update", defaults: { format: :json }
+    patch "user"       => "user#update", defaults: { format: :json }
+  end
   
   # Password reset
-  post "update_password" => "user#update_password"
+  post "update_password" => "profile#update_password"
   get  "reset/:code"     => "password#edit", as: :reset
   put  "reset/:code"     => "password#update"
   
