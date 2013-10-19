@@ -1,11 +1,11 @@
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
-  
-  embeds_many :schools
-  embeds_many :jobs
+
   embeds_many :awards
+  embeds_many :jobs
   embeds_many :references
+  embeds_many :schools
   
   attr_accessor :password, :password_confirmation
   

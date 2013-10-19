@@ -25,6 +25,11 @@ Cv::Application.routes.draw do
     get   "user"       => "user#show", defaults: { format: :json }
     put   "user"       => "user#update", defaults: { format: :json }
     patch "user"       => "user#update", defaults: { format: :json }
+    
+    resources :awards, only: [ :update, :destroy ], defaults: { format: :json }
+    resources :jobs, only: [ :update, :destroy ], defaults: { format: :json }
+    resources :references, only: [ :update, :destroy ], defaults: { format: :json }
+    resources :schools, only: [ :update, :destroy ], defaults: { format: :json }
   end
   
   # Password reset
