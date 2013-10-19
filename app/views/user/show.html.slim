@@ -151,7 +151,7 @@ javascript:
     };
     
     var setBlurOnEnter = function(attrUpdater, tmplName) {
-      if (tmplName !== 'lines' && tmplName !== 'list') { 
+      if (tmplName !== 'lines' && tmplName !== 'list' && tmplName !== 'textarea') { 
         attrUpdater.on('keypress', function(e) {
           if (e.keyCode == 13) { $(this).blur(); }
         });

@@ -1,7 +1,7 @@
 .row
   .col-lg-8
     h1 = @user.name
-    - if @user.respond_to?(:address)
+    - if @user.respond_to?(:address) && @user.address
       p.address
         == @user.address.join('<br>')
     p.contact-info
@@ -95,7 +95,7 @@
                 = award.awarded_on.strftime("%B %Y")
 .row
   .col-lg-8
-    - if @user.respond_to?(:skills) && !@user.skills.empty?
+    - if @user.respond_to?(:skills) && @user.skills && !@user.skills.empty?
       h2 Skills 
       ul
         - @user.skills.each do |skill|
