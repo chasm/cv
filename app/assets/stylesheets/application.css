@@ -142,40 +142,49 @@ span.navbar-brand:hover {
   margin: 30px 0;
 }
 
-.edit-button {
-  float: right;
-  margin-top: 26px;
-}
-
 .cancel-button {
   float: right;
 }
 
-.add-school, .add-job {
+.add-award,
+.add-job,
+.add-reference,
+.add-school {
+  float: right;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 26px 0 0;
+  color: #b8b8b8;
+}
+
+.add-award:hover,
+.add-job:hover,
+.add-reference:hover,
+.add-school:hover {
+  color: #5cb85c;
+}
+
+.remove-icon {
   font-size: 16px;
   font-weight: normal;
   color: #b8b8b8;
 }
 
-.remove-icon {
-  text-align: right;
-}
-
-.remove-school, .remove-job {
-  font-size: 20px;
-  font-weight: normal;
-  color: #b8b8b8;
-}
-
-.add-school:hover,
-.add-job:hover {
-  color: #5cb85c;
-}
-
-.remove-school:hover,
-.remove-job:hover {
+.remove-icon:hover {
   color: #d9534f;
 }
+
+textarea.ipeditor {
+  resize: none;
+}
+
+textarea.ipeditor:focus {
+  resize: vertical;
+}
+
+.awards-rows input.ipeditor { margin: 0; padding: 0; }
+.awards-rows .name input.ipeditor { font-weight: bold; }
+.awards-rows .remove, #awards-rows .awarded-on input.ipeditor { text-align: right; }
 
 .school, .job {
   border-bottom: 1px dotted #b8b8b8;
@@ -186,7 +195,7 @@ span.navbar-brand:hover {
   float: right;
 }
 
-.address {
+.address, .address textarea {
   color: #428bca;
 }
 
@@ -195,17 +204,19 @@ span.navbar-brand:hover {
   color: #d9534f;
 }
 
-.phone {
+.phone, .phone input {
   color: #d9534f;
 }
 
-.email {
+.email, .email input {
   color: #c24ed9;
 }
 
-.objective {
+.objective, .objective textarea {
   font-style: italic;
 }
+
+.objective textarea { margin-bottom: -20px; }
 
 .hint {
   font-style: italic;
@@ -215,6 +226,16 @@ span.navbar-brand:hover {
 .hint:before {
   content: '* ';
 }
+
+.ipeditor {
+  border: none;
+  padding: 0;
+  width: 100%;
+}
+
+.ipeditor:focus { border: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; outline: none; background: #eeeeee; }
+
+#user_name { font-weight: 500; color: #428bca; }
 
 /* Set the fixed height of the footer here */
 #footer {

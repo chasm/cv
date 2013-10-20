@@ -8,6 +8,7 @@ gem 'jquery-rails'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'slim'
 gem 'puma'
+gem 'jquery-ui-rails'
 
 gem 'bson_ext'
 gem 'mongoid', github: 'mongoid/mongoid', ref: 'f91feef'

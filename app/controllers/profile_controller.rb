@@ -2,7 +2,7 @@ class ProfileController < ApplicationController
   before_action :is_authenticated
   before_action :get_user
   
-  def show
+  def edit
   end
   
   def destroy

@@ -6,18 +6,18 @@ class AwardsController < ApplicationController
   
   def update
     @award = @user.awards.find_by(id: params[:id])
-    
+
     if @award
       if @award.update_attributes(award_params)
         head :no_content
       else
-        render json: @award, status: :unprocessable_entity
+        render json: @award.errors, status: :unprocessable_entity
       end
     else
       if @award = @user.awards.create(award_params.merge(id: params[:id]))
         head :created
       else
-        render json: @award, status: :unprocessable_entity
+        render json: @award.errors, status: :unprocessable_entity
       end
     end
   end

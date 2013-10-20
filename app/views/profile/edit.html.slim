@@ -1,0 +1,202 @@
+#user
+
+script#user-tmpl type="text/x-handlebars-template"
+  .row
+    .col-lg-8
+      h1 
+        input.ipeditor type="text" name="user.name" id="user_name" value="{{name}}" data-val="{{name}}" data-url="/api/user" placeholder="Name required"
+      p.address
+        textarea.ipeditor name="user.address" id="user_address" data-url="/api/user" data-val="{{address}}" data-split="true" rows="{{rows address}}" placeholder="Add an address"
+          | {{split address}}
+      p.contact-info
+        .phone
+          input.ipeditor type="text" name="user.phone" id="user_phone" value="{{phone}}" data-val="{{phone}}" data-url="/api/user" placeholder="Add a phone number"
+        .email
+          input.ipeditor type="text" name="user.email" id="user_email" value="{{email}}" data-val="{{email}}" data-url="/api/user" placeholder="Email address required"
+  .row
+    .col-lg-8
+      h2 Objective 
+      p.objective
+        textarea.ipeditor name="user.objective" id="user_objective" data-url="/api/user" data-val="{{objective}}" placeholder="Add an objective"
+          | {{objective}}
+  .row
+    .col-lg-8
+      h2 Education
+      | {{#each schools}}
+      .school
+        p.dates
+          span.from
+            | {{from started_on}}
+          ' -
+          span.to
+            | {{to left_on}}
+        p.address
+          strong
+            | {{name}}
+          br
+          | {{{lionize address}}}
+        p
+          | {{#if highest_grade_completed}}
+          #highest-grade-completed
+            strong> Highest grade completed:
+            ' {{highest_grade_completed}}
+          | {{/if}}
+          | {{#if graduated}}
+          #graduated
+            strong> Graduated?
+            ' {{graduated}}
+          | {{/if}}
+          | {{#if awards}}
+          #awards
+            strong> Awards:
+            ' {{{lionize awards}}}
+          | {{/if}}
+          | {{#if activities}}
+          #activities
+            strong> Activities:
+            ' {{{lionize activities}}}
+          | {{/if}}
+      | {{/each}}
+  .row
+    .col-lg-8
+      h2 Work Experience
+      | {{#each jobs}}
+      .job
+        p.dates
+          span.from
+            | {{from started_on}}
+          ' -
+          span.to
+            | {{to left_on}}
+        p.address
+          strong
+            | {{#if position}}{{position}},{{/if}} {{company}}
+          br
+          | {{{lionize address}}}
+        p
+          | {{#if duties}}
+          #duties
+            strong> Duties:
+            ul
+              | {{{listify duties}}}
+          | {{/if}}
+      | {{/each}}
+  .row
+    .col-lg-8
+      span.glyphicon.glyphicon-plus.add-award title="Add an award"
+      h2 Honors and Awards
+      | {{#each awards}}
+      .awards-rows.row id="{{id}}"
+        .name.col-lg-8
+          input.ipeditor type="text" name="award.name" id="award_name" value="{{name}}" data-val="{{name}}" data-url="/api/awards/{{id}}" placeholder="Award name required"
+        .awarded-on.col-lg-3
+          input.ipeditor.datepicker type="text" data-date-format="mm/dd/yyyy" name="award.awarded_on" id="award_awarded_on" value="{{from awarded_on}}" data-val="{{awarded_on}}" data-url="/api/awards/{{id}}" placeholder="Date of award"
+        .remove.col-lg-1
+          span.glyphicon.glyphicon-remove.remove-icon title="Delete this award" data-url="/api/awards/" data-id="{{id}}"
+      | {{/each}}
+    
+javascript:
+  $(function() {
+    Handlebars.registerHelper('lionize', function(arr) {
+      return arr.join('<br>');
+    });
+
+    Handlebars.registerHelper('listify', function(arr) {
+      return '<li>' + arr.join('</li><li>') + '</li>';
+    });
+    
+    Handlebars.registerHelper('split', function(arr) {
+      return arr.join('\n');
+    });
+    
+    Handlebars.registerHelper('rows', function(arr) {
+      return arr.length;
+    });
+
+    Handlebars.registerHelper('from', function(dt) {
+      return moment(dt).format('MM/DD/YYYY');
+    });
+
+    Handlebars.registerHelper('to', function(dt) {
+      return dt ? moment(dt).format('MM/DD/YYYY') : 'present';
+    });
+    
+    var getRows = function(str) {
+      return str.split("\n").length;
+    };
+    
+    var updateAttribute = function(e) {
+      var item = $(this);
+      var out = {};
+      var atts = $(this).attr('name').split('.');
+      var val = $(this).val();
+      var orig = $(this).data('val');
+      out[atts[0]] = {};
+      out[atts[0]][atts[1]] = val;
+      $.ajax({
+        url: $(this).data('url'),
+        method: 'PATCH',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(out),
+        success: function(data) {
+          item.effect("highlight", { color: '#79f279' }, 3000);
+          if (item.data('split')) { item.attr('rows', getRows(item.val())); }
+          item.data('val', item.val());
+        },
+        error: function(xhr, status, err) {
+          $.each(xhr.responseJSON, function(k,v) {
+            noty({
+              type: "error",
+              text: v,
+              timeout: "12000",
+              layout: "bottom"
+            });
+          });
+          item.val(orig);
+          item.effect("highlight", { color: '#d9534f' }, 3000);
+        }
+      });
+    };
+    
+    var removeItem = function(e) {
+      var item = $(this);
+      var itemId = item.data('id');
+      var url = item.data('url') + itemId;
+      var pElem = $('#' + itemId);
+      
+      $.ajax({
+        url: url,
+        method: 'DELETE',
+        success: function(data) {
+          pElem.find('input').each(function(k,v) { $(v).attr('style', 'background-color: transparent'); });
+          pElem.effect("highlight", { color: '#f0ee4e' }, 1500, function() { pElem.remove(); });
+        },
+        failure: function(xhr) {
+          noty({
+            type: "error",
+            text: "Unable to delete item.",
+            timeout: "12000",
+            layout: "bottom"
+          });
+        }
+      });
+    };
+  
+    $.ajax({
+      url: '/api/user',
+      method: 'GET',
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function(data) {
+        var user = data["user"];
+        
+        var template = Handlebars.compile($('#user-tmpl').html());
+        $('#user').html(template(user));
+        
+        $('.ipeditor').on('change', updateAttribute);
+        $('.datepicker').datetimepicker({startView: 3, minView: 3, autoclose: true});
+        $('.remove-icon').on('click', removeItem);
+      }
+    });
+  });

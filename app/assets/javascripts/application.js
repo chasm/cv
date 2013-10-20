@@ -10,6 +10,7 @@
 //= require ./vendor/numeral
 //= require ./vendor/moment
 //= require ./vendor/datetimepicker
+//= require jquery.ui.effect.all
 
 $(function() {
   // Add deletion confirmation dialog modals

@@ -10,13 +10,13 @@ Cv::Application.routes.draw do
   get  "register/:code" => "registration#new", as: :register
   post "register/:code" => "registration#create"
   
-  get    "profile"      => "profile#show"
+  get    "profile"      => "profile#edit"
   put    "profile"      => "profile#update"
   patch  "profile"      => "profile#update", defaults: { format: :json }
   delete "profile"      => "profile#destroy"
   
   # Public CV
-  get "cv/:id" => "profile#show"
+  get "cv/:id" => "profile#show", as: :cv
   
   # CV API
   scope :api do
@@ -42,5 +42,5 @@ Cv::Application.routes.draw do
   get "terms"   => "site#terms"
   
   # You can have the root of your site routed with "root"
-  root 'site#index'
+  root 'profile#edit'
 end
