@@ -94,9 +94,29 @@ script#user-tmpl type="text/x-handlebars-template"
         .remove.col-lg-1
           span.glyphicon.glyphicon-remove.remove-icon title="Delete this award" data-url="/api/awards/" data-id="{{id}}"
       | {{/each}}
+      
+script#award-form-tmpl type="text/x-handlebars-template"
+  #awards-form-modal.modal.fade tabindex="-1" role="dialog" aria-labelledby="awards-form-title" aria-hidden="true"
+    .modal-dialog
+      .modal-content
+        = form_for :award, url: "/api/awards/{{id}}", method: "PUT", html: { role: "form", autocomplete: :off } do |f|
+          .modal-header
+            button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
+            h4#awards-form-title.modal-title Add a new award
+          .modal-body
+            .row
+              .form-group.col-lg-6
+                = f.label :name, "Name of award"
+                = f.text_field :name, autofocus: true, class: "text clear form-control", placeholder: "Name"
+              .form-group.col-lg-6
+                = f.label :awarded_on, "Date of award"
+                = f.text_field :awarded_on, autofocus: true, class: "datepicker clear form-control", placeholder: "Date"
+          .modal-footer
+            button.btn.btn-default type="button" data-dismiss="modal" Close
+            input.btn.btn-primary type="submit" value="Create Award"
     
 javascript:
-  $(function() {
+  $(function() {  
     Handlebars.registerHelper('lionize', function(arr) {
       return arr.join('<br>');
     });
@@ -182,6 +202,15 @@ javascript:
         }
       });
     };
+    
+    var addAward = function(e) {
+      var item = $(this);
+      var template = Handlebars.compile($('#award-form-tmpl').html());
+      $(template({id: '1'})).modal('show');
+      $('#award_awarded_on').datetimepicker({startView: 3, minView: 3, autoclose: true});
+      
+      
+    };
   
     $.ajax({
       url: '/api/user',
@@ -197,6 +226,7 @@ javascript:
         $('.ipeditor').on('change', updateAttribute);
         $('.datepicker').datetimepicker({startView: 3, minView: 3, autoclose: true});
         $('.remove-icon').on('click', removeItem);
+        $('.add-award').on('click', addAward);
       }
     });
   });
