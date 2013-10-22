@@ -10,7 +10,7 @@
  *
  *= require bootstrap
  *= require bootstrap-theme
- *= require datetimepicker
+ *= require jquery.ui.datepicker
  *= require_self
  */
 
@@ -180,6 +180,14 @@ textarea.ipeditor {
 
 textarea.ipeditor:focus {
   resize: vertical;
+}
+
+.ipeditor.datepicker {
+  text-align: right;
+}
+
+.ui-datepicker {
+  border: none !important;
 }
 
 .awards-rows input.ipeditor { margin: 0; padding: 0; }

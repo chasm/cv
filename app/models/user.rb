@@ -11,11 +11,11 @@ class User
   
   field :id, type: String
   field :name, type: String
-  field :address, type: Array
+  field :address, type: Array, default: []
   field :email, type: String
   field :phone, type: String
   field :objective, type: String
-  field :skills, type: Array
+  field :skills, type: Array, default: []
   
   field :salt, type: String
   field :fish, type: String
@@ -32,7 +32,7 @@ class User
   validates :password, confirmation: true
   
   def self.authenticate(email, password)
-    user = User.find_by(email: email)
+    user = User.find_by(email: email.downcase)
     
     return user if user && user.fish == BCrypt::Engine.hash_secret(password, user.salt)
     nil

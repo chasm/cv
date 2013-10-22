@@ -9,8 +9,8 @@
 //= require_tree ./vendor/themes
 //= require ./vendor/numeral
 //= require ./vendor/moment
-//= require ./vendor/datetimepicker
 //= require jquery.ui.effect.all
+//= require jquery.ui.datepicker
 
 $(function() {
   // Add deletion confirmation dialog modals

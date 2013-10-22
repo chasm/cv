@@ -94,6 +94,13 @@ script#user-tmpl type="text/x-handlebars-template"
         .remove.col-lg-1
           span.glyphicon.glyphicon-remove.remove-icon title="Delete this award" data-url="/api/awards/" data-id="{{id}}"
       | {{/each}}
+  .row
+    .col-lg-8
+      span.glyphicon.glyphicon-plus.add-skill title="Add a skill"
+      h2 Skills
+      | {{#each skills}}
+      | {{skill}}
+      | {{/each}}
       
 script#award-form-tmpl type="text/x-handlebars-template"
   #awards-form-modal.modal.fade tabindex="-1" role="dialog" aria-labelledby="awards-form-title" aria-hidden="true"
@@ -110,7 +117,7 @@ script#award-form-tmpl type="text/x-handlebars-template"
                 = f.text_field :name, autofocus: true, class: "text clear form-control", placeholder: "Name"
               .form-group.col-lg-6
                 = f.label :awarded_on, "Date of award"
-                = f.text_field :awarded_on, autofocus: true, class: "datepicker clear form-control", placeholder: "Date"
+                = f.text_field :awarded_on, id: "award-datepicker", class: "datepicker clear form-control", placeholder: "Date"
           .modal-footer
             button.btn.btn-default type="button" data-dismiss="modal" Close
             input.btn.btn-primary type="submit" value="Create Award"
@@ -134,11 +141,11 @@ javascript:
     });
 
     Handlebars.registerHelper('from', function(dt) {
-      return moment(dt).format('MM/DD/YYYY');
+      return moment(dt).format('MMMM YYYY');
     });
 
     Handlebars.registerHelper('to', function(dt) {
-      return dt ? moment(dt).format('MM/DD/YYYY') : 'present';
+      return dt ? moment(dt).format('MMMM YYYY') : 'present';
     });
     
     var getRows = function(str) {
@@ -203,13 +210,57 @@ javascript:
       });
     };
     
+    var setDatepicker = function(dp) {
+      console.log('datepicker', $('.datepicker'));
+       dp.datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'MM yy',
+
+        onClose: function () {
+          var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+          var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+
+          $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+          $(this).datepicker('refresh');
+        },
+
+        beforeShow: function () {
+          if ((selDate = $(this).val()).length > 0) 
+          {
+            iYear = selDate.substring(selDate.length - 4, selDate.length);
+            iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), $(this).datepicker('option', 'monthNames'));
+
+            $(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
+            $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+          }
+        }
+      });
+
+       dp.focus(function () {
+          $(".ui-datepicker-calendar").hide();
+          $("#ui-datepicker-div").position({
+              my: "center top",
+              at: "center bottom",
+              of: $(this)
+          });
+       });
+
+       dp.blur(function () {
+         $(".ui-datepicker-calendar").hide();
+       });
+    };
+    
     var addAward = function(e) {
       var item = $(this);
       var template = Handlebars.compile($('#award-form-tmpl').html());
-      $(template({id: '1'})).modal('show');
-      $('#award_awarded_on').datetimepicker({startView: 3, minView: 3, autoclose: true});
-      
-      
+      $(template({id: '1'}))
+        .modal()
+        .on('show.bs.modal', function(e) {
+          console.log('show.bs.modal');
+        var datepicker = $(this).find('.datepicker');
+          setDatepicker(datepicker);
+        }).modal('show');
     };
   
     $.ajax({
@@ -224,7 +275,7 @@ javascript:
         $('#user').html(template(user));
         
         $('.ipeditor').on('change', updateAttribute);
-        $('.datepicker').datetimepicker({startView: 3, minView: 3, autoclose: true});
+        setDatepicker($('.datepicker'));
         $('.remove-icon').on('click', removeItem);
         $('.add-award').on('click', addAward);
       }
