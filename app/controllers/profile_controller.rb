@@ -16,7 +16,7 @@ class ProfileController < ApplicationController
     @user.expires_at = Time.now + 4.hours
     @user.save
 
-    PasswordMailer.reset_email(@user, request).deliver
+    UserMailer.reset_email(@user, request).deliver
   
     redirect_to profile_url, notice: "An email with instructions for resetting your password has been sent to you."
   end
