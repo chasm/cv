@@ -190,9 +190,22 @@ textarea.ipeditor:focus {
   border: none !important;
 }
 
-.awards-rows input.ipeditor { margin: 0; padding: 0; }
-.awards-rows .name input.ipeditor { font-weight: bold; }
-.awards-rows .remove, #awards-rows .awarded-on input.ipeditor { text-align: right; }
+.awards-rows input.ipeditor,
+.references-rows input.ipeditor {
+  margin: 0;
+  padding: 0;
+}
+
+.awards-rows .name input.ipeditor,
+.references-rows .name input.ipeditor {
+  font-weight: bold;
+}
+
+.awards-rows .remove,
+.awards-rows .awarded-on input.ipeditor,
+.references-rows .remove {
+  text-align: right;
+}
 
 .school, .job {
   border-bottom: 1px dotted #b8b8b8;

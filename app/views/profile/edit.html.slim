@@ -96,17 +96,31 @@ script#user-tmpl type="text/x-handlebars-template"
       | {{/each}}
   .row
     .col-lg-8
-      span.glyphicon.glyphicon-plus.add-skill title="Add a skill"
       h2 Skills
-      | {{#each skills}}
-      | {{skill}}
+      textarea.ipeditor name="user.skills" id="user_skills" data-url="/api/user" data-val="{{skills}}" data-split="true" rows="{{rows skills}}" placeholder="Add skills, one per line"
+        | {{split skills}}
+  .row
+    .col-lg-8
+      span.glyphicon.glyphicon-plus.add-reference title="Add a reference"
+      h2 References
+      | {{#each references}}
+      .references-rows.row id="{{id}}"
+        .name.col-lg-4
+          input.ipeditor type="text" name="reference.name" id="reference_name" value="{{name}}" data-val="{{name}}" data-url="/api/references/{{id}}" placeholder="Name of reference required"
+        .email.col-lg-4
+          input.ipeditor type="text" name="reference.email" id="reference_email" value="{{email}}" data-val="{{email}}" data-url="/api/references/{{id}}" placeholder="Add email address"
+        .phone.col-lg-3
+          input.ipeditor type="text" name="reference.phone" id="reference_phone" value="{{phone}}" data-val="{{phone}}" data-url="/api/references/{{id}}" placeholder="Add phone number"
+        .remove.col-lg-1
+          span.glyphicon.glyphicon-remove.remove-icon title="Delete this reference" data-url="/api/references/" data-id="{{id}}"
       | {{/each}}
+
       
 script#award-form-tmpl type="text/x-handlebars-template"
   #awards-form-modal.modal.fade tabindex="-1" role="dialog" aria-labelledby="awards-form-title" aria-hidden="true"
     .modal-dialog
       .modal-content
-        = form_for :award, url: "/api/awards/{{id}}", method: "PUT", html: { role: "form", autocomplete: :off } do |f|
+        = form_for :award, url: "/api/awards/{{id}}", method: "PUT", html: { role: "form", id: "award-add-form", autocomplete: :off } do |f|
           .modal-header
             button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
             h4#awards-form-title.modal-title Add a new award
@@ -117,13 +131,56 @@ script#award-form-tmpl type="text/x-handlebars-template"
                 = f.text_field :name, autofocus: true, class: "text clear form-control", placeholder: "Name"
               .form-group.col-lg-6
                 = f.label :awarded_on, "Date of award"
-                = f.text_field :awarded_on, id: "award-datepicker", class: "datepicker clear form-control", placeholder: "Date"
+                = f.text_field :awarded_on, id: "award_awarded_on", class: "datepicker clear form-control", placeholder: "Date"
           .modal-footer
             button.btn.btn-default type="button" data-dismiss="modal" Close
             input.btn.btn-primary type="submit" value="Create Award"
+            
+script#reference-form-tmpl type="text/x-handlebars-template"
+  #reference-form-modal.modal.fade tabindex="-1" role="dialog" aria-labelledby="reference-form-title" aria-hidden="true"
+    .modal-dialog
+      .modal-content
+        = form_for :reference, url: "/api/references/{{id}}", method: "PUT", html: { role: "form", id: "reference-add-form", autocomplete: :off } do |f|
+          .modal-header
+            button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
+            h4#reference-form-title.modal-title Add a new reference
+          .modal-body
+            .row
+              .form-group.col-lg-6
+                = f.label :name, "Name of reference"
+                = f.text_field :name, autofocus: true, class: "text clear form-control", placeholder: "Name"
+              .form-group.col-lg-6
+                = f.label :email, "Email address"
+                = f.text_field :email, class: "text clear form-control", placeholder: "Email"
+            .row
+              .form-group.col-lg-6
+                = f.label :phone, "Phone number"
+                = f.text_field :phone, class: "text clear form-control", placeholder: "Phone"
+          .modal-footer
+            button.btn.btn-default type="button" data-dismiss="modal" Close
+            input.btn.btn-primary type="submit" value="Create Reference"
     
 javascript:
-  $(function() {  
+  $(function() {
+    var uuids = [];
+    
+    var getUuid = function() {
+      if (uuids.length < 10) {
+        $.ajax({
+          method: 'GET',
+          url: '/api/uuids/100',
+          dataType: 'json',
+          success: function(data) {
+            uuids = $.merge(uuids, data['uuids']);
+          }
+        });
+      }
+      
+      return uuids.pop();
+    };
+    
+    getUuid();
+  
     Handlebars.registerHelper('lionize', function(arr) {
       return arr.join('<br>');
     });
@@ -211,8 +268,7 @@ javascript:
     };
     
     var setDatepicker = function(dp) {
-      console.log('datepicker', $('.datepicker'));
-       dp.datepicker({
+      dp.datepicker({
         changeMonth: true,
         changeYear: true,
         dateFormat: 'MM yy',
@@ -237,29 +293,71 @@ javascript:
         }
       });
 
-       dp.focus(function () {
-          $(".ui-datepicker-calendar").hide();
-          $("#ui-datepicker-div").position({
-              my: "center top",
-              at: "center bottom",
-              of: $(this)
-          });
-       });
+      dp.focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });
+      });
 
-       dp.blur(function () {
-         $(".ui-datepicker-calendar").hide();
+      dp.blur(function () {
+       $(".ui-datepicker-calendar").hide();
+      });
+    };
+    
+    var createAward = function(e) {
+      var form = $(this);
+      var name = form.find('#award_name').val();
+      var awarded_on = form.find('#award_awarded_on').val();
+      console.log('Creating a new award...');
+      
+      $.ajax({
+        method: 'PUT',
+        url: form.attr('action'),
+        contentType: 'application/json',
+        data: JSON.stringify({ award: {name: name, awarded_on: awarded_on } }),
+        success: function(data) {
+          console.log('success!', form);
+          $('#awards-form-modal').modal('hide');
+          $('#awards-form-modal').remove();
+        }
        });
+      e.preventDefault();
+    };
+    
+    var createReference = function(e) {
+      console.log('create a new reference',
+        $(this).find('#reference_name').val(),
+        $(this).find('#reference_email').val(),
+        $(this).find('#reference_phone').val());
+
+      $(this).remove();
+      e.preventDefault();
     };
     
     var addAward = function(e) {
       var item = $(this);
       var template = Handlebars.compile($('#award-form-tmpl').html());
-      $(template({id: '1'}))
+      $(template({id: getUuid()}))
         .modal()
         .on('show.bs.modal', function(e) {
-          console.log('show.bs.modal');
-        var datepicker = $(this).find('.datepicker');
+          console.log('show.bs.modal for awards',$(this).find('#award-add-form'));
+          var datepicker = $(this).find('.datepicker');
           setDatepicker(datepicker);
+          $(this).find('#award-add-form').on('submit', createAward);
+        }).modal('show');
+    };
+    
+    var addReference = function(e) {
+      var item = $(this);
+      var template = Handlebars.compile($('#reference-form-tmpl').html());
+      $(template({id: getUuid()}))
+        .modal()
+        .on('show.bs.modal', function(e) {
+          console.log('show.bs.modal for references',$(this).find('#reference-add-form'));
+          $(this).find('#reference-add-form').on('submit', createReference);
         }).modal('show');
     };
   
@@ -278,6 +376,7 @@ javascript:
         setDatepicker($('.datepicker'));
         $('.remove-icon').on('click', removeItem);
         $('.add-award').on('click', addAward);
+        $('.add-reference').on('click', addReference);
       }
     });
   });
